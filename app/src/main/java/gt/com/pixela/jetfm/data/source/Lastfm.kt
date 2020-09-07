@@ -2,7 +2,7 @@ package gt.com.pixela.jetfm.data.source
 
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
-import gt.com.pixela.jetfm.data.models.LoginResult
+import gt.com.pixela.jetfm.data.models.*
 import kotlinx.coroutines.supervisorScope
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
@@ -13,8 +13,10 @@ class LastfmApiClient {
     private lateinit var digest: MessageDigest
 
     private val api = "https://ws.audioscrobbler.com/2.0"
-    private val login = "/?method=auth.getMobileSession&format=json"
+    private val infoUser = "/?method=user.getInfo&format=json"
     private val key = "5cb87d3af5c6c1ea5f6a9b0692845578"
+    private val login = "/?method=auth.getMobileSession&format=json"
+    private val recentTracks = "/?method=user.getRecentTracks&format=json"
     private val secret = "0f3e535599a5f511e46347821c5a9e77"
 
     init {
@@ -38,7 +40,34 @@ class LastfmApiClient {
         }
     }
 
+    suspend fun getInfo(user: String): User? {
+        return supervisorScope {
+            Fuel.get(
+                api + infoUser,
+                parameters = listOf(
+                    Pair(first = "user", second = user),
+                    Pair(first = "api_key", second = key),
+                )
+            ).awaitObjectResult(UserResult.Deserializer())
+                .fold(success = { it.user }, failure = { null })
+        }
+    }
 
+    suspend fun getRecentTracks(user: String): List<Track> {
+        return supervisorScope {
+            Fuel.get(
+                api + recentTracks,
+                parameters = listOf(
+                    Pair(first = "user", second = user),
+                    Pair(first = "api_key", second = key),
+                )
+            ).awaitObjectResult(RecentTracksResult.Deserializer())
+                .fold(success = { it.recentTracks.tracks }, failure = { listOf() })
+        }
+    }
+
+
+    @Suppress("SameParameterValue", "SpellCheckingInspection")
     private fun signature(key: String, password: String, secret: String, username: String) =
         md5("api_key${key}methodauth.getMobileSessionpassword${password}username${username}$secret")
 

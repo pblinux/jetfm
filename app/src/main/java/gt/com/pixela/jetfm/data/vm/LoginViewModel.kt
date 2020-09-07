@@ -26,7 +26,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             val result = LastfmApiClient().login(username, password)
             result?.let {
                 state.postValue(LoginState.Loaded(it.session.name, it.session.key))
-            } ?: kotlin.run { state.postValue(LoginState.Error) }
+            } ?: run { state.postValue(LoginState.Error) }
         }
     }
 }
