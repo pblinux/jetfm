@@ -9,6 +9,7 @@ import androidx.preference.PreferenceManager
 import com.github.zsoltk.compose.backpress.AmbientBackPressHandler
 import com.github.zsoltk.compose.backpress.BackPressHandler
 import com.github.zsoltk.compose.savedinstancestate.BundleScope
+import gt.com.pixela.jetfm.data.vm.HomeViewModel
 import gt.com.pixela.jetfm.data.vm.LoginViewModel
 import gt.com.pixela.jetfm.ui.route.Root
 import gt.com.pixela.jetfm.ui.theme.JetfmTheme
@@ -16,6 +17,7 @@ import gt.com.pixela.jetfm.ui.theme.JetfmTheme
 class MainActivity : AppCompatActivity() {
     private val backPressHandler = BackPressHandler()
     private val loginViewModel by viewModels<LoginViewModel>()
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     BundleScope(savedInstanceState) {
                         Root.Content(
                             defaultRouting = default,
-                            listOf(loginViewModel)
+                            listOf(loginViewModel, homeViewModel)
                         )
                     }
                 }

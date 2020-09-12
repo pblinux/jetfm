@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.AndroidViewModel
 import com.github.zsoltk.compose.router.Router
+import gt.com.pixela.jetfm.data.vm.HomeViewModel
 import gt.com.pixela.jetfm.data.vm.LoginViewModel
 
 interface Root {
@@ -28,7 +29,9 @@ interface Root {
                                 .firstOrNull { value -> value is LoginViewModel } as LoginViewModel
                         )
                         is RootRouting.LoggedIn -> LoggedIn.Content(
-                            defaultRouting = LoggedIn.InRouting.Home, it.user, it.key
+                            defaultRouting = LoggedIn.InRouting.Home,
+                            viewModel = viewModels
+                                .firstOrNull { value -> value is HomeViewModel } as HomeViewModel
                         )
                     }
                 }

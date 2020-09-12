@@ -1,5 +1,7 @@
 package gt.com.pixela.jetfm.data.source
 
+import android.util.Log
+import androidx.preference.PreferenceManager
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
 import gt.com.pixela.jetfm.data.models.*
@@ -14,10 +16,10 @@ class LastfmApiClient {
 
     private val api = "https://ws.audioscrobbler.com/2.0"
     private val infoUser = "/?method=user.getInfo&format=json"
-    private val key = "5cb87d3af5c6c1ea5f6a9b0692845578"
+    private val key = "APIKEY"
     private val login = "/?method=auth.getMobileSession&format=json"
     private val recentTracks = "/?method=user.getRecentTracks&format=json"
-    private val secret = "0f3e535599a5f511e46347821c5a9e77"
+    private val secret = "APISECRET"
 
     init {
         try {
@@ -53,19 +55,19 @@ class LastfmApiClient {
         }
     }
 
-    suspend fun getRecentTracks(user: String): List<Track> {
+    suspend fun getRecentTracks(user: String, page: Int = 1): RecentTracks? {
         return supervisorScope {
             Fuel.get(
                 api + recentTracks,
                 parameters = listOf(
                     Pair(first = "user", second = user),
                     Pair(first = "api_key", second = key),
+                    Pair(first = "page", second = page.toString())
                 )
             ).awaitObjectResult(RecentTracksResult.Deserializer())
-                .fold(success = { it.recentTracks.tracks }, failure = { listOf() })
+                .fold(success = { it.recentTracks }, failure = { null })
         }
     }
-
 
     @Suppress("SameParameterValue", "SpellCheckingInspection")
     private fun signature(key: String, password: String, secret: String, username: String) =

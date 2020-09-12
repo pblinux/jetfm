@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 private val DarkColorPalette = darkColors(
     primary = primaryRed,
     primaryVariant = secondaryRed,
-    secondary = primaryRed
+    secondary = primaryRed,
 )
 
 private val LightColorPalette = lightColors(
@@ -30,7 +30,7 @@ fun JetfmTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable(
 
     MaterialTheme(
         colors = colors,
-        typography = typography,
+        typography = jetfmTypography(darkTheme),
         shapes = shapes,
         content = content
     )

@@ -17,10 +17,4 @@ data class RecentTracksResult(@Json(name = "recenttracks") val recentTracks: Rec
 data class RecentTracks(
     @Json(name = "@attr") val meta: Meta,
     @Json(name = "track") val tracks: List<Track> = listOf()
-) {
-    class Deserializer : ResponseDeserializable<RecentTracks> {
-        override fun deserialize(content: String): RecentTracks? =
-            Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                .adapter(RecentTracks::class.java).fromJson(content)
-    }
-}
+)
