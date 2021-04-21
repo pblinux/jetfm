@@ -1,89 +1,131 @@
 package gt.com.pixela.jetfm.ui.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.coil.CoilImage
-import gt.com.pixela.jetfm.data.models.RecentTracks
-import gt.com.pixela.jetfm.data.models.Track
+import com.google.accompanist.flowlayout.FlowRow
+import gt.com.pixela.jetfm.data.models.HomeInfo
 import gt.com.pixela.jetfm.data.vm.ResultState
+import gt.com.pixela.jetfm.ui.composables.common.ErrorView
+import gt.com.pixela.jetfm.ui.composables.common.LoadingView
+import gt.com.pixela.jetfm.ui.composables.common.UninitializedView
+import gt.com.pixela.jetfm.ui.composables.home.AlbumRowItem
+import gt.com.pixela.jetfm.ui.composables.home.ArtistColumnItem
+import gt.com.pixela.jetfm.ui.composables.home.RecentTrackRowItem
+import gt.com.pixela.jetfm.ui.composables.home.TrackRowItem
 import gt.com.pixela.jetfm.utils.LocalHomeViewModel
 
 @ExperimentalFoundationApi
 @Composable
 fun Dashboard() {
   val homeViewModel = LocalHomeViewModel.current
-  val tracksState by homeViewModel.weeklyTracks.collectAsState()
+  val homeState by homeViewModel.home.collectAsState()
+  val scrollState = rememberLazyListState()
+  homeViewModel.updateBarElevation(scrollState.firstVisibleItemIndex)
 
-  when (tracksState) {
-    ResultState.Uninitialized -> {
-      Text(text = "No he iniciado")
-    }
-    ResultState.Loading -> {
-      Text(text = "Estoy cargando")
-    }
-    ResultState.Error -> {
-      Text(text = "Soy un error")
-    }
+  when (homeState) {
+    ResultState.Uninitialized -> UninitializedView()
+    ResultState.Loading -> LoadingView()
+    ResultState.Error -> ErrorView {}
     is ResultState.Loaded -> {
-      LazyColumn() {
-        items((15), itemContent = { Text(it.toString()) })
+      val loadedData = (homeState as ResultState.Loaded).data as HomeInfo
+
+      LazyColumn(
+        state = scrollState,
+      ) {
+        // Recent tracks
         item {
-          Column {
-            repeat((1..20).count()) { Text("Probando") }
+          Text(
+            "Recently played tracks",
+            Modifier
+              .padding(horizontal = 16.dp)
+              .padding(top = 8.dp),
+            style = MaterialTheme.typography.h6,
+          )
+        }
+        item {
+          LazyRow(
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+          ) {
+            items(
+              loadedData.recentTracks.recentTracks,
+              itemContent = { RecentTrackRowItem(recentTrack = it) })
           }
         }
-        items((15), itemContent = { Text(it.toString()) })
+        // Top artists
+        item {
+          Text(
+            "Your top artists for the week",
+            Modifier
+              .padding(horizontal = 16.dp)
+              .padding(bottom = 16.dp),
+            style = MaterialTheme.typography.h6,
+          )
+        }
+        items(
+          loadedData.topArtists.artists,
+          itemContent = { ArtistColumnItem(artist = it) }
+        )
+        // Top tracks
+        item {
+          Text(
+            "Top tracks for this week",
+            Modifier
+              .padding(horizontal = 16.dp)
+              .padding(bottom = 16.dp, top = 16.dp),
+            style = MaterialTheme.typography.h6,
+          )
+        }
+        item {
+          LazyRow(
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+          ) {
+            items(
+              loadedData.topTracks.tracks,
+              itemContent = { TrackRowItem(track = it) })
+          }
+        }
+        // Top albums
+        item {
+          Text(
+            "Your weekly's top albums",
+            Modifier
+              .padding(horizontal = 16.dp, vertical = 16.dp),
+            style = MaterialTheme.typography.h6,
+          )
+        }
+        item {
+          BoxWithConstraints() {
+            FlowRow(
+              Modifier
+                .padding(horizontal = 16.dp),
+              crossAxisSpacing = 16.dp,
+              mainAxisSpacing = 12.dp,
+            ) {
+              val size = (this.maxWidth / 2) - 24.dp
+
+              loadedData.topAlbums.albums.forEach {
+                AlbumRowItem(album = it, size = size)
+              }
+            }
+          }
+        }
+        item {
+          Spacer(Modifier.height(64.dp))
+        }
       }
-
-
-//      val tracks = (tracksState as ResultState.Loaded).data as RecentTracks
-//      LazyVerticalGrid(cells = GridCells.Fixed(2), Modifier.padding(bottom = 32.dp)) {
-//        items((tracks.tracks), itemContent = {
-//          TrackGridItem(track = it)
-//        })
     }
-  }
-}
-
-@Composable
-fun TrackGridItem(track: Track) {
-  Box(
-    modifier = Modifier
-      .background(Color.Red)
-      .fillMaxWidth()
-      .height(200.dp)
-  ) {
-    CoilImage(
-      data = track.image.single { it.size == "large" }.url,
-      contentDescription = track.name,
-      fadeIn = true,
-      contentScale = ContentScale.FillBounds
-    )
-
-    Box(
-      modifier = Modifier
-        .fillMaxSize()
-        .alpha(0.5f)
-        .background(Color.Black)
-    ) {
-
-    }
-
-    Text(track.name)
   }
 }

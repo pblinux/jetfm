@@ -3,16 +3,25 @@ package gt.com.pixela.jetfm.data.source
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
-import gt.com.pixela.jetfm.data.models.RecentTracks
 import gt.com.pixela.jetfm.data.models.User
-import gt.com.pixela.jetfm.data.models.results.LoginResult
-import gt.com.pixela.jetfm.data.models.results.RecentTracksResult
-import gt.com.pixela.jetfm.data.models.results.UserResult
+import gt.com.pixela.jetfm.data.models.response.TopAlbums
+import gt.com.pixela.jetfm.data.models.response.TopArtists
+import gt.com.pixela.jetfm.data.models.response.RecentTracks
+import gt.com.pixela.jetfm.data.models.response.TopTracks
+import gt.com.pixela.jetfm.data.models.results.*
 import kotlinx.coroutines.supervisorScope
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
+enum class Period(val value: String) {
+  Overall("overall"),
+  Weekly("7day"),
+  Monthly("1month"),
+  Trimester("3month"),
+  Biannual("6month"),
+  Yearly("12month"),
+}
 
 class LastfmApiClient {
   private lateinit var digest: MessageDigest
@@ -28,7 +37,9 @@ class LastfmApiClient {
   private val infoUser = "/?method=user.getInfo&format=json"
   private val login = "/?method=auth.getMobileSession&format=json"
   private val recentTracks = "/?method=user.getRecentTracks&format=json"
-  private val weeklyTracks = "/?method=user.getWeeklyTrackChart&format=json"
+  private val topAlbums = "/?method=user.gettopalbums&format=json"
+  private val topArtists = "/?method=user.gettopartists&format=json"
+  private val topTracks = "/?method=user.gettoptracks&format=json"
 
   init {
     try {
@@ -73,38 +84,108 @@ class LastfmApiClient {
   }
 
   /*
-  * Weekly track
-  * Get weekly track for user
+  * Recently track
+  * Get most recent track for user
   * */
-  suspend fun getWeeklyTracks(user: String): RecentTracks? {
+  suspend fun getRecentTracks(user: String, limit: Int = 20, page: Int = 1): RecentTracks {
     return supervisorScope {
       Fuel.get(
         api + recentTracks, parameters = listOf(
           Pair("user", user),
           Pair("api_key", key),
-          Pair("period", "7day"),
-          Pair("limit", 10)
+          Pair("limit", limit),
+          Pair("page", page)
         )
       )
         .awaitObjectResult(RecentTracksResult.Deserializer())
-        .fold(success = { it.recentTracks }, failure = { null })
+        .fold(success = { it.recentTracks }, failure = {
+          Log.d("JetFM: Error recent", it.response.statusCode.toString())
+          throw Error(it.response.responseMessage)
+        })
     }
   }
 
-
-  // LEGACY
-
-  suspend fun getRecentTracks(user: String, page: Int = 1): RecentTracks? {
+  /*
+  * Top Period artists
+  * Get top artists for user based on a period of time
+  * */
+  suspend fun getTopPeriodArtists(
+    user: String,
+    limit: Int = 10,
+    period: Period = Period.Weekly
+  ): TopArtists {
     return supervisorScope {
       Fuel.get(
-        api + recentTracks,
-        parameters = listOf(
-          Pair(first = "user", second = user),
-          Pair(first = "api_key", second = key),
-          Pair(first = "page", second = page.toString())
+        api + topArtists, parameters = listOf(
+          Pair("user", user),
+          Pair("api_key", key),
+          Pair("period", period.value),
+          Pair("limit", limit)
         )
-      ).awaitObjectResult(RecentTracksResult.Deserializer())
-        .fold(success = { it.recentTracks }, failure = { null })
+      )
+        .awaitObjectResult(TopArtistsResult.Deserializer())
+        .fold(
+          success = { it.topArtists },
+          failure = {
+            Log.d("JetFM: Error artists", it.response.statusCode.toString())
+            throw Error(it.response.responseMessage)
+          })
+    }
+  }
+
+  /*
+ * Top period albums
+ * Get top albums for user based on a period of time
+ * */
+  suspend fun getTopPeriodAlbums(
+    user: String,
+    limit: Int = 10,
+    period: Period = Period.Weekly
+  ): TopAlbums {
+    return supervisorScope {
+      Fuel.get(
+        api + topAlbums, parameters = listOf(
+          Pair("user", user),
+          Pair("api_key", key),
+          Pair("period", period.value),
+          Pair("limit", limit)
+        )
+      )
+        .awaitObjectResult(TopAlbumsResult.Deserializer())
+        .fold(
+          success = { it.topAlbums },
+          failure = {
+            Log.d("JetFM: Error albums", it.response.statusCode.toString())
+            throw Error(it.response.responseMessage)
+          })
+    }
+  }
+
+  /*
+* Top period albums
+* Get top albums for user based on a period of time
+* */
+  suspend fun getTopPeriodTracks(
+    user: String,
+    limit: Int = 10,
+    period: Period = Period.Weekly
+  ): TopTracks {
+    return supervisorScope {
+      Fuel.get(
+        api + topTracks, parameters = listOf(
+          Pair("user", user),
+          Pair("api_key", key),
+          Pair("period", period.value),
+          Pair("limit", limit)
+        )
+      )
+        .awaitObjectResult(TopTracksResult.Deserializer())
+        .fold(
+          success = { it.topTracks },
+          failure = {
+            Log.d("JetFM: Error tracks", it.response.statusCode.toString())
+            throw Error(it.response.responseMessage)
+          })
     }
   }
 

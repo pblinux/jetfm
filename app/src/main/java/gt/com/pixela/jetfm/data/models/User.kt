@@ -3,6 +3,8 @@ package gt.com.pixela.jetfm.data.models
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import gt.com.pixela.jetfm.data.models.common.Image
+import gt.com.pixela.jetfm.data.models.common.Registered
 
 @Suppress("SpellCheckingInspection")
 data class User(

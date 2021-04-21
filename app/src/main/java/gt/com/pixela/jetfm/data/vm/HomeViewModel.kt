@@ -1,18 +1,13 @@
 package gt.com.pixela.jetfm.data.vm
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import gt.com.pixela.jetfm.data.models.Meta
-import gt.com.pixela.jetfm.data.models.Track
+import gt.com.pixela.jetfm.data.models.HomeInfo
 import gt.com.pixela.jetfm.data.source.LastfmApiClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,29 +19,53 @@ sealed class ResultState {
   data class Loaded(val data: Any) : ResultState()
 }
 
-sealed class TracksState {
-  object Uninitialized : TracksState()
-  object Loading : TracksState()
-  object Error : TracksState()
-  data class Loaded(val tracks: List<Track>) : TracksState()
-}
-
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
   // LastFM data source
   private val api = LastfmApiClient()
 
-  // Weekly tracks
-  private val _weeklyTracks = MutableStateFlow<ResultState>(ResultState.Uninitialized)
-  val weeklyTracks = _weeklyTracks.asStateFlow()
+  // JetBar elevated
+  private var _lastIndex = 0
+  private val _barElevated = MutableStateFlow(false)
+  val barElevated = _barElevated.asStateFlow()
 
-  fun getWeeklyTracks() {
+  // Home info
+  private val _home = MutableStateFlow<ResultState>(ResultState.Uninitialized)
+  val home = _home.asStateFlow()
+
+  // Update bar position
+  fun updateBarElevation(index: Int) {
     viewModelScope.launch {
-      _weeklyTracks.emit(ResultState.Loading)
-      val result = api.getWeeklyTracks(getUser())
-      result?.let { _weeklyTracks.emit(ResultState.Loaded(it)) } ?: run {
-        _weeklyTracks.emit(
-          ResultState.Error
+      if (index != _lastIndex) {
+        _barElevated.value = index > _lastIndex
+      } else {
+        _barElevated.value = false
+      }
+    }
+  }
+
+  // Get home screen info
+  fun getHome() {
+    viewModelScope.launch {
+      try {
+        val user = getUser()
+        _home.emit(ResultState.Loading)
+        val recentTracks = api.getRecentTracks(user)
+        val topWeeklyArtists = api.getTopPeriodArtists(user)
+        val topWeeklyAlbums = api.getTopPeriodAlbums(user)
+        val topWeeklyTracks = api.getTopPeriodTracks(user)
+        _home.emit(
+          ResultState.Loaded(
+            HomeInfo(
+              recentTracks = recentTracks,
+              topAlbums = topWeeklyAlbums,
+              topArtists = topWeeklyArtists,
+              topTracks = topWeeklyTracks
+            )
+          )
         )
+      } catch (e: Error) {
+        _home.emit(ResultState.Error)
+        Log.d("Jetfm", e.message ?: "Error")
       }
     }
   }
@@ -66,60 +85,5 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
       EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
       EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
-  }
-
-
-  // LEGACY
-  private val userInfo = MutableLiveData<ResultState>()
-  private val recentTracks = MutableLiveData<ResultState>()
-  private val historyTracks = MutableLiveData<TracksState>()
-
-  val currentInfo: LiveData<ResultState> get() = userInfo
-  val currentRecentTracks: LiveData<ResultState> get() = recentTracks
-  val currentHistoryTracks: LiveData<TracksState> get() = historyTracks
-
-  var currentHistoryMeta: Meta? = null
-
-  fun getInfo() {
-    getApplication<Application>().applicationContext
-    CoroutineScope(Dispatchers.IO).launch {
-      userInfo.postValue(ResultState.Loading)
-      val result = api.getInfo(getUser())
-      result?.let {
-        userInfo.postValue(ResultState.Loaded(it))
-      } ?: run { userInfo.postValue(ResultState.Error) }
-    }
-  }
-
-  fun getRecentTracks() {
-    CoroutineScope(Dispatchers.IO).launch {
-      recentTracks.postValue(ResultState.Loading)
-      val result = api.getRecentTracks(getUser())
-      recentTracks.postValue(
-        ResultState.Loaded(
-          result?.tracks
-            ?: run { listOf<Track>() })
-      )
-    }
-  }
-
-  fun getHistoryTracks() {
-    CoroutineScope(Dispatchers.IO).launch {
-      val result = api.getRecentTracks(
-        getUser(),
-        page = currentHistoryMeta?.let { currentHistoryMeta!!.page + 1 } ?: run { 1 })
-      val tracks = when (historyTracks.value) {
-        is TracksState.Loaded -> {
-          (historyTracks.value as TracksState.Loaded).tracks.toMutableList()
-        }
-        else -> {
-          mutableListOf()
-        }
-      }
-      result?.let { tracks.addAll(it.tracks); currentHistoryMeta = it.meta }
-      historyTracks.postValue(
-        TracksState.Loaded(tracks)
-      )
-    }
   }
 }

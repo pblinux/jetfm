@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ import gt.com.pixela.jetfm.utils.LocalHomeViewModel
 import gt.com.pixela.jetfm.utils.LocalLoginViewModel
 import gt.com.pixela.jetfm.utils.LocalMainNavigator
 
+@ExperimentalAnimationApi
 class MainActivity : AppCompatActivity() {
   private val loginViewModel by viewModels<LoginViewModel>()
   private val homeViewModel by viewModels<HomeViewModel>()
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             }
             composable("home") {
               CompositionLocalProvider(LocalHomeViewModel provides homeViewModel) {
-                homeViewModel.getWeeklyTracks()
+                homeViewModel.getHome()
                 Home()
               }
             }

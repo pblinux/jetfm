@@ -4,9 +4,12 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import gt.com.pixela.jetfm.data.models.RecentTracks
+import gt.com.pixela.jetfm.data.models.response.RecentTracks
 import gt.com.pixela.jetfm.data.models.Session
 import gt.com.pixela.jetfm.data.models.User
+import gt.com.pixela.jetfm.data.models.response.TopAlbums
+import gt.com.pixela.jetfm.data.models.response.TopArtists
+import gt.com.pixela.jetfm.data.models.response.TopTracks
 
 data class LoginResult(val session: Session) {
   class Deserializer : ResponseDeserializable<LoginResult> {
@@ -22,6 +25,33 @@ data class RecentTracksResult(@Json(name = "recenttracks") val recentTracks: Rec
     override fun deserialize(content: String): RecentTracksResult? =
       Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         .adapter(RecentTracksResult::class.java).fromJson(content)
+  }
+}
+
+@Suppress("SpellCheckingInspection")
+data class TopArtistsResult(@Json(name = "topartists") val topArtists: TopArtists) {
+  class Deserializer : ResponseDeserializable<TopArtistsResult> {
+    override fun deserialize(content: String): TopArtistsResult? =
+      Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        .adapter(TopArtistsResult::class.java).fromJson(content)
+  }
+}
+
+@Suppress("SpellCheckingInspection")
+data class TopAlbumsResult(@Json(name = "topalbums") val topAlbums: TopAlbums) {
+  class Deserializer : ResponseDeserializable<TopAlbumsResult> {
+    override fun deserialize(content: String): TopAlbumsResult? =
+      Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        .adapter(TopAlbumsResult::class.java).fromJson(content)
+  }
+}
+
+@Suppress("SpellCheckingInspection")
+data class TopTracksResult(@Json(name = "toptracks") val topTracks: TopTracks) {
+  class Deserializer : ResponseDeserializable<TopTracksResult> {
+    override fun deserialize(content: String): TopTracksResult? =
+      Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        .adapter(TopTracksResult::class.java).fromJson(content)
   }
 }
 

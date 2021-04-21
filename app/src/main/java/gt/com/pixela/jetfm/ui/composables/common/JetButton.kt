@@ -1,5 +1,6 @@
 package gt.com.pixela.jetfm.ui.composables.common
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -24,7 +25,7 @@ fun JetButton(
   isLoading: Boolean = false,
 ) {
   Button(
-    modifier = modifier,
+    modifier = modifier.animateContentSize(),
     onClick = onClick,
     colors = ButtonDefaults.buttonColors(
       backgroundColor = secondaryRed
