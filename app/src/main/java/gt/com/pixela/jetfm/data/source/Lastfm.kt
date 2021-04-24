@@ -4,10 +4,7 @@ import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
 import gt.com.pixela.jetfm.data.models.User
-import gt.com.pixela.jetfm.data.models.response.TopAlbums
-import gt.com.pixela.jetfm.data.models.response.TopArtists
-import gt.com.pixela.jetfm.data.models.response.RecentTracks
-import gt.com.pixela.jetfm.data.models.response.TopTracks
+import gt.com.pixela.jetfm.data.models.response.*
 import gt.com.pixela.jetfm.data.models.results.*
 import kotlinx.coroutines.supervisorScope
 import java.io.UnsupportedEncodingException
@@ -40,6 +37,7 @@ class LastfmApiClient {
   private val topAlbums = "/?method=user.gettopalbums&format=json"
   private val topArtists = "/?method=user.gettopartists&format=json"
   private val topTracks = "/?method=user.gettoptracks&format=json"
+  private val favTracks = "/?method=user.getlovedtracks&format=json"
 
   init {
     try {
@@ -112,7 +110,8 @@ class LastfmApiClient {
   suspend fun getTopPeriodArtists(
     user: String,
     limit: Int = 10,
-    period: Period = Period.Weekly
+    period: Period = Period.Weekly,
+    page: Int = 1
   ): TopArtists {
     return supervisorScope {
       Fuel.get(
@@ -120,7 +119,8 @@ class LastfmApiClient {
           Pair("user", user),
           Pair("api_key", key),
           Pair("period", period.value),
-          Pair("limit", limit)
+          Pair("limit", limit),
+          Pair("page", page)
         )
       )
         .awaitObjectResult(TopArtistsResult.Deserializer())
@@ -140,7 +140,8 @@ class LastfmApiClient {
   suspend fun getTopPeriodAlbums(
     user: String,
     limit: Int = 10,
-    period: Period = Period.Weekly
+    period: Period = Period.Weekly,
+    page: Int = 1
   ): TopAlbums {
     return supervisorScope {
       Fuel.get(
@@ -148,7 +149,8 @@ class LastfmApiClient {
           Pair("user", user),
           Pair("api_key", key),
           Pair("period", period.value),
-          Pair("limit", limit)
+          Pair("limit", limit),
+          Pair("page", page)
         )
       )
         .awaitObjectResult(TopAlbumsResult.Deserializer())
@@ -162,13 +164,14 @@ class LastfmApiClient {
   }
 
   /*
-* Top period albums
-* Get top albums for user based on a period of time
+* Top period tracks
+* Get top tracks for user based on a period of time
 * */
   suspend fun getTopPeriodTracks(
     user: String,
     limit: Int = 10,
-    period: Period = Period.Weekly
+    period: Period = Period.Weekly,
+    page: Int = 1
   ): TopTracks {
     return supervisorScope {
       Fuel.get(
@@ -176,12 +179,41 @@ class LastfmApiClient {
           Pair("user", user),
           Pair("api_key", key),
           Pair("period", period.value),
-          Pair("limit", limit)
+          Pair("limit", limit),
+          Pair("page", page)
         )
       )
         .awaitObjectResult(TopTracksResult.Deserializer())
         .fold(
           success = { it.topTracks },
+          failure = {
+            Log.d("JetFM: Error tracks", it.response.statusCode.toString())
+            throw Error(it.response.responseMessage)
+          })
+    }
+  }
+
+  /*
+* Loved tracks
+* Get loved albums for user
+* */
+  suspend fun getLovedTracks(
+    user: String,
+    limit: Int = 10,
+    page: Int = 1
+  ): FavTracks {
+    return supervisorScope {
+      Fuel.get(
+        api + favTracks, parameters = listOf(
+          Pair("user", user),
+          Pair("api_key", key),
+          Pair("limit", limit),
+          Pair("page", page)
+        )
+      )
+        .awaitObjectResult(FavTracksResult.Deserializer())
+        .fold(
+          success = { it.favTracks },
           failure = {
             Log.d("JetFM: Error tracks", it.response.statusCode.toString())
             throw Error(it.response.responseMessage)

@@ -4,10 +4,20 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import gt.com.pixela.jetfm.data.models.Album
+import gt.com.pixela.jetfm.data.models.Artist
 import gt.com.pixela.jetfm.data.models.HomeInfo
-import gt.com.pixela.jetfm.data.source.LastfmApiClient
+import gt.com.pixela.jetfm.data.models.Track
+import gt.com.pixela.jetfm.data.source.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,6 +33,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   // LastFM data source
   private val api = LastfmApiClient()
 
+  // Selected period
+  private val _period = MutableStateFlow(Period.Weekly)
+  private val _periodOpen = MutableStateFlow(false)
+  val period = _period.asStateFlow()
+  val periodDialogOpen = _periodOpen.asStateFlow()
+
   // JetBar elevated
   private var _lastIndex = 0
   private val _barElevated = MutableStateFlow(false)
@@ -31,6 +47,35 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   // Home info
   private val _home = MutableStateFlow<ResultState>(ResultState.Uninitialized)
   val home = _home.asStateFlow()
+
+  // History
+  var tracks: Flow<PagingData<Track>> =
+    Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(api, getUser(), _period.value) }
+      .flow.cachedIn(viewModelScope)
+
+  var artists: Flow<PagingData<Artist>> =
+    Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(api, getUser(), _period.value) }
+      .flow.cachedIn(viewModelScope)
+
+  var albums: Flow<PagingData<Album>> =
+    Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(api, getUser(), _period.value) }
+      .flow.cachedIn(viewModelScope)
+
+  val lovedTracks: Flow<PagingData<Track>> =
+    Pager(PagingConfig(pageSize = 10)) { PaginatedLovedTracks(api, getUser()) }
+      .flow.cachedIn(viewModelScope)
+
+  // Toggle period dialog
+  fun togglePeriodDialog() {
+    _periodOpen.value = !_periodOpen.value
+  }
+
+  // Change period
+  fun changePeriod(period: Period) {
+    viewModelScope.launch {
+      _period.value = period
+    }
+  }
 
   // Update bar position
   fun updateBarElevation(index: Int) {
@@ -49,25 +94,48 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
       try {
         val user = getUser()
         _home.emit(ResultState.Loading)
-        val recentTracks = api.getRecentTracks(user)
-        val topWeeklyArtists = api.getTopPeriodArtists(user)
-        val topWeeklyAlbums = api.getTopPeriodAlbums(user)
-        val topWeeklyTracks = api.getTopPeriodTracks(user)
-        _home.emit(
-          ResultState.Loaded(
-            HomeInfo(
-              recentTracks = recentTracks,
-              topAlbums = topWeeklyAlbums,
-              topArtists = topWeeklyArtists,
-              topTracks = topWeeklyTracks
+        coroutineScope {
+          val recentTracks = async { api.getRecentTracks(user) }
+          val topWeeklyArtists = async { api.getTopPeriodArtists(user) }
+          val topWeeklyAlbums = async { api.getTopPeriodAlbums(user) }
+          val topWeeklyTracks = async { api.getTopPeriodTracks(user) }
+          _home.emit(
+            ResultState.Loaded(
+              HomeInfo(
+                recentTracks = recentTracks.await(),
+                topAlbums = topWeeklyAlbums.await(),
+                topArtists = topWeeklyArtists.await(),
+                topTracks = topWeeklyTracks.await()
+              )
             )
           )
-        )
+        }
       } catch (e: Error) {
         _home.emit(ResultState.Error)
         Log.d("Jetfm", e.message ?: "Error")
       }
     }
+  }
+
+  // Reload tracks when period changed
+  fun reloadTracks() {
+    tracks =
+      Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(api, getUser(), _period.value) }
+        .flow.cachedIn(viewModelScope)
+  }
+
+  // Reload tracks when period changed
+  fun reloadArtists() {
+    artists =
+      Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(api, getUser(), _period.value) }
+        .flow.cachedIn(viewModelScope)
+  }
+
+  // Reload tracks when period changed
+  fun reloadAlbums() {
+    albums =
+      Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(api, getUser(), _period.value) }
+        .flow.cachedIn(viewModelScope)
   }
 
   // Get current user

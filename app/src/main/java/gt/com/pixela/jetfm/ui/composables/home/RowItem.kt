@@ -14,17 +14,59 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.CoilImage
+import gt.com.pixela.jetfm.data.models.Album
 import gt.com.pixela.jetfm.data.models.RecentTrack
 import gt.com.pixela.jetfm.data.models.Track
 import gt.com.pixela.jetfm.ui.composables.animations.JetAudioBars
 
 @Preview
 @Composable
-fun TrackRowPreview() {
-  TrackRowItemRaw(
+fun FavTrackItemPreview() {
+  RoundedRowItemRaw(
+    imageUrl = "https://lastfm.freetls.fastly.net/i/u/174s/043311d565be4296bb13f299ba1f08de.jpg",
+    title = "Unknown Pleasures",
+    subtitle = "10 Apr 2018, 23:10",
+  )
+}
+
+@Composable
+fun FavTrackItem(track: Track, size: Dp = 200.dp) {
+  RoundedRowItemRaw(
+    imageUrl = track.image.single { it.size == "large" }.url,
+    title = track.name,
+    subtitle = track.date!!.date,
+    size = size
+  )
+}
+
+@Preview
+@Composable
+fun AlbumRowPreview() {
+  RoundedRowItemRaw(
+    imageUrl = "https://lastfm.freetls.fastly.net/i/u/174s/043311d565be4296bb13f299ba1f08de.jpg",
+    title = "Unknown Pleasures by Joy Division",
+    subtitle = "Your play count: 29",
+  )
+}
+
+@Composable
+fun AlbumRowItem(album: Album, size: Dp = 200.dp) {
+  RoundedRowItemRaw(
+    imageUrl = album.image.single { it.size == "large" }.url,
+    title = "${album.name} by ${album.artist.name}",
+    subtitle = "Your play count: ${album.playCount}",
+    size = size
+  )
+}
+
+@Preview
+@Composable
+private fun TrackRowPreview() {
+  RowItemRaw(
     imageUrl = "https://lastfm.freetls.fastly.net/i/u/174s/043311d565be4296bb13f299ba1f08de.jpg",
     name = "Love will tear us apart",
     artist = "Joy Division",
@@ -34,7 +76,7 @@ fun TrackRowPreview() {
 
 @Composable
 fun TrackRowItem(track: Track) {
-  TrackRowItemRaw(
+  RowItemRaw(
     imageUrl = track.image.single { it.size == "large" }.url,
     name = track.name,
     artist = track.artist.name,
@@ -48,7 +90,7 @@ fun RecentTrackRowItem(recentTrack: RecentTrack) {
   val isPlaying =
     if (recentTrack.attributes != null) recentTrack.attributes.isPlaying else false
 
-  TrackRowItemRaw(
+  RowItemRaw(
     imageUrl = recentTrack.image.single { it.size == "large" }.url,
     name = recentTrack.name,
     artist = recentTrack.artist.name,
@@ -58,7 +100,56 @@ fun RecentTrackRowItem(recentTrack: RecentTrack) {
 }
 
 @Composable
-fun TrackRowItemRaw(
+fun RoundedRowItemRaw(
+  imageUrl: String,
+  title: String,
+  subtitle: String,
+  size: Dp = 200.dp,
+) {
+  val dark = isSystemInDarkTheme()
+
+  Box(
+    modifier = Modifier
+      .width(size)
+      .height(size)
+      .clip(RoundedCornerShape(16.dp))
+      .background(color = if (dark) Color.Black else Color.White)
+  ) {
+    CoilImage(
+      data = imageUrl,
+      contentDescription = title,
+      fadeIn = true,
+      contentScale = ContentScale.Crop,
+      modifier = Modifier.fillMaxSize()
+    )
+    Box(
+      modifier = Modifier
+        .fillMaxSize()
+        .alpha(if (dark) 0.6f else 0.5f)
+        .background(Color.Black),
+      content = {}
+    )
+    Text(
+      text = title,
+      color = Color.White,
+      style = MaterialTheme.typography.subtitle1.copy(fontSize = 16.sp),
+      modifier = Modifier
+        .align(Alignment.BottomStart)
+        .padding(horizontal = 16.dp, vertical = 24.dp)
+    )
+    Text(
+      text = subtitle,
+      color = Color.White,
+      style = MaterialTheme.typography.caption.copy(fontSize = 8.sp),
+      modifier = Modifier
+        .align(Alignment.TopEnd)
+        .padding(horizontal = 16.dp, vertical = 24.dp)
+    )
+  }
+}
+
+@Composable
+private fun RowItemRaw(
   imageUrl: String,
   name: String,
   artist: String,
@@ -95,7 +186,7 @@ fun TrackRowItemRaw(
       verticalAlignment = Alignment.CenterVertically
     ) {
       if (isPlaying)
-        JetAudioBars(width = 3.dp, maxHeight = 32.dp)
+        JetAudioBars(width = 3.dp, maxHeight = 24.dp)
       if (isPlaying)
         Spacer(Modifier.width(12.dp))
       Text(

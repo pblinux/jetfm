@@ -1,24 +1,25 @@
 package gt.com.pixela.jetfm.ui.screens
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.*
 import gt.com.pixela.jetfm.R
+import gt.com.pixela.jetfm.ui.composables.home.JetBar
+import gt.com.pixela.jetfm.ui.composables.home.PeriodDialog
 import gt.com.pixela.jetfm.ui.screens.home.Activity
 import gt.com.pixela.jetfm.ui.screens.home.Dashboard
-import gt.com.pixela.jetfm.ui.composables.home.JetBar
 import gt.com.pixela.jetfm.ui.screens.home.Profile
 import gt.com.pixela.jetfm.utils.LocalHomeViewModel
 
@@ -36,14 +37,12 @@ val screens = listOf(HomeScreen.Dashboard, HomeScreen.Activity, HomeScreen.Profi
 fun Home() {
   val homeNavigationController = rememberNavController()
   val homeViewModel = LocalHomeViewModel.current
+  var currentScreen: HomeScreen by remember { mutableStateOf(HomeScreen.Dashboard) }
   val barElevated by homeViewModel.barElevated.collectAsState()
-
-  homeNavigationController.addOnDestinationChangedListener { _, _, _ ->
-    homeViewModel.updateBarElevation(0)
-  }
+  val periodDialogOpen by homeViewModel.periodDialogOpen.collectAsState()
 
   Scaffold(
-    topBar = { JetBar(elevated = barElevated) },
+    topBar = { JetBar(elevated = barElevated, screen = currentScreen) },
     bottomBar = {
       BottomNavigation {
         val navBackStackEntry by homeNavigationController.currentBackStackEntryAsState()
@@ -67,19 +66,27 @@ fun Home() {
                 popUpTo = homeNavigationController.graph.startDestination
                 launchSingleTop = true
               }
+              homeViewModel.updateBarElevation(0)
+              currentScreen = screen
             }
           )
         }
       }
     }
   ) {
-    NavHost(
-      navController = homeNavigationController,
-      startDestination = HomeScreen.Dashboard.route
-    ) {
-      composable(HomeScreen.Dashboard.route) { SwitchAnimation { Dashboard() } }
-      composable(HomeScreen.Activity.route) { SwitchAnimation { Activity() } }
-      composable(HomeScreen.Profile.route) { SwitchAnimation { Profile() } }
+    Box(Modifier.fillMaxSize()) {
+      NavHost(
+        navController = homeNavigationController,
+        startDestination = HomeScreen.Dashboard.route
+      ) {
+        composable(HomeScreen.Dashboard.route) { SwitchAnimation { Dashboard() } }
+        composable(HomeScreen.Activity.route) { SwitchAnimation { Activity() } }
+        composable(HomeScreen.Profile.route) { SwitchAnimation { Profile() } }
+      }
+
+      if (periodDialogOpen) {
+        PeriodDialog { homeViewModel.togglePeriodDialog() }
+      }
     }
   }
 }

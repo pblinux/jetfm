@@ -22,8 +22,16 @@ fun UninitializedView() {
 
 @Preview
 @Composable
-fun LoadingView() {
-  Box(Modifier.fillMaxSize()) {
+fun LoadingView(modifier: Modifier = Modifier) {
+  Box(modifier.fillMaxSize()) {
+    CircularProgressIndicator(Modifier.align(Alignment.Center))
+  }
+}
+
+@Preview
+@Composable
+fun LoadingItem(modifier: Modifier = Modifier) {
+  Box(modifier = modifier) {
     CircularProgressIndicator(Modifier.align(Alignment.Center))
   }
 }

@@ -37,7 +37,7 @@ fun JetAudioBars(
     repeat(amount) {
       val percentage by remember { mutableStateOf(Random.nextFloat()) }
       val targetPercentage by remember { mutableStateOf(Random.nextFloat()) }
-      val animationDuration by remember { mutableStateOf(Random.nextInt(600, 1200)) }
+      val animationDuration by remember { mutableStateOf(Random.nextInt(300, 600)) }
       val infiniteTransition = rememberInfiniteTransition()
 
       val animation by infiniteTransition.animateValue(

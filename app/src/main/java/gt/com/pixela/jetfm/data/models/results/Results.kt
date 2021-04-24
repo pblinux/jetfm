@@ -4,12 +4,9 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import gt.com.pixela.jetfm.data.models.response.RecentTracks
 import gt.com.pixela.jetfm.data.models.Session
 import gt.com.pixela.jetfm.data.models.User
-import gt.com.pixela.jetfm.data.models.response.TopAlbums
-import gt.com.pixela.jetfm.data.models.response.TopArtists
-import gt.com.pixela.jetfm.data.models.response.TopTracks
+import gt.com.pixela.jetfm.data.models.response.*
 
 data class LoginResult(val session: Session) {
   class Deserializer : ResponseDeserializable<LoginResult> {
@@ -52,6 +49,15 @@ data class TopTracksResult(@Json(name = "toptracks") val topTracks: TopTracks) {
     override fun deserialize(content: String): TopTracksResult? =
       Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         .adapter(TopTracksResult::class.java).fromJson(content)
+  }
+}
+
+@Suppress("SpellCheckingInspection")
+data class FavTracksResult(@Json(name = "lovedtracks") val favTracks: FavTracks) {
+  class Deserializer : ResponseDeserializable<FavTracksResult> {
+    override fun deserialize(content: String): FavTracksResult? =
+      Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        .adapter(FavTracksResult::class.java).fromJson(content)
   }
 }
 
