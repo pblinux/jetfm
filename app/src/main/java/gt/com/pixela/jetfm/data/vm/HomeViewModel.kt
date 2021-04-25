@@ -10,10 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import gt.com.pixela.jetfm.data.models.Album
-import gt.com.pixela.jetfm.data.models.Artist
-import gt.com.pixela.jetfm.data.models.HomeInfo
-import gt.com.pixela.jetfm.data.models.Track
+import gt.com.pixela.jetfm.data.models.*
 import gt.com.pixela.jetfm.data.source.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -48,6 +45,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   private val _home = MutableStateFlow<ResultState>(ResultState.Uninitialized)
   val home = _home.asStateFlow()
 
+  // Profile info
+  private val _profile = MutableStateFlow<ResultState>(ResultState.Uninitialized)
+  val profile = _profile.asStateFlow()
+
   // History
   var tracks: Flow<PagingData<Track>> =
     Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(api, getUser(), _period.value) }
@@ -64,6 +65,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   val lovedTracks: Flow<PagingData<Track>> =
     Pager(PagingConfig(pageSize = 10)) { PaginatedLovedTracks(api, getUser()) }
       .flow.cachedIn(viewModelScope)
+
+  // Profile friends
+  val friends: Flow<PagingData<User>> =
+    Pager(PagingConfig(pageSize = 10)) { PaginatedFriends(api, getUser()) }
+      .flow.cachedIn(viewModelScope)
+
 
   // Toggle period dialog
   fun togglePeriodDialog() {
@@ -112,7 +119,21 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
       } catch (e: Error) {
         _home.emit(ResultState.Error)
-        Log.d("Jetfm", e.message ?: "Error")
+      }
+    }
+  }
+
+  // Get profile screen info
+  fun getProfile() {
+    viewModelScope.launch {
+      try {
+        _profile.emit(ResultState.Loading)
+        coroutineScope {
+          val userInfo = async { api.getInfo(getUser()) }
+          _profile.emit(ResultState.Loaded(ProfileInfo(userInfo.await())))
+        }
+      } catch (e: Error) {
+        _profile.emit(ResultState.Error)
       }
     }
   }

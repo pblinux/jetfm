@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import gt.com.pixela.jetfm.data.models.Album
 import gt.com.pixela.jetfm.data.models.Artist
 import gt.com.pixela.jetfm.data.models.Track
+import gt.com.pixela.jetfm.data.models.User
 
 class PaginatedTracks(
   private val client: LastfmApiClient,
@@ -118,6 +119,34 @@ class PaginatedLovedTracks(
   }
 
   override fun getRefreshKey(state: PagingState<Int, Track>): Int? {
+    return state.anchorPosition
+  }
+}
+
+class PaginatedFriends(
+  private val client: LastfmApiClient,
+  private val user: String,
+) :
+  PagingSource<Int, User>() {
+
+
+  override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
+    return try {
+      val next = params.key ?: 1
+      val friends = client.getFriends(user, page = next)
+
+      LoadResult.Page(
+        data = friends.friends,
+        prevKey = null,
+        nextKey = if (next <= friends.meta.totalPages) next.plus(1) else null
+      )
+
+    } catch (e: Error) {
+      LoadResult.Error(e)
+    }
+  }
+
+  override fun getRefreshKey(state: PagingState<Int, User>): Int? {
     return state.anchorPosition
   }
 }

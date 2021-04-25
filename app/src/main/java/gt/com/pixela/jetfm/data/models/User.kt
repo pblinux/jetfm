@@ -8,14 +8,14 @@ import gt.com.pixela.jetfm.data.models.common.Registered
 
 @Suppress("SpellCheckingInspection")
 data class User(
-  val age: String,
+  val age: String?,
   val bootstrap: String,
   val country: String,
-  val gender: String,
+  val gender: String?,
   val image: List<Image>,
   val name: String,
-  val playcount: String,
-  val playlists: String,
+  val playcount: Int,
+  val playlists: Int,
   val realname: String,
   val registered: Registered,
   val subscriber: Int,

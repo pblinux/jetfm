@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             composable("home") {
               CompositionLocalProvider(LocalHomeViewModel provides homeViewModel) {
                 homeViewModel.getHome()
+                homeViewModel.getProfile()
                 Home()
               }
             }

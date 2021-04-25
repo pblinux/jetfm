@@ -68,3 +68,11 @@ data class UserResult(val user: User) {
         .adapter(UserResult::class.java).fromJson(content)
   }
 }
+
+data class FriendsResult(@Json(name = "friends") val friends: Friends) {
+  class Deserializer : ResponseDeserializable<FriendsResult> {
+    override fun deserialize(content: String): FriendsResult? =
+      Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        .adapter(FriendsResult::class.java).fromJson(content)
+  }
+}

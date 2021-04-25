@@ -22,6 +22,7 @@ import com.google.accompanist.coil.CoilImage
 import gt.com.pixela.jetfm.data.models.Album
 import gt.com.pixela.jetfm.data.models.Artist
 import gt.com.pixela.jetfm.data.models.Track
+import gt.com.pixela.jetfm.data.models.User
 
 @Preview
 @Composable
@@ -75,16 +76,26 @@ fun LovedTrackItem(track: Track) {
 }
 
 @Composable
+fun FriendItem(user: User) {
+  HistoryItemRaw(
+    imageUrl = user.image.single { it.size == "extralarge" }.url,
+    title = user.realname, caption = "aka ${user.name}", amount = "",
+    modifier = Modifier.padding(vertical = 8.dp)
+  )
+}
+
+@Composable
 private fun HistoryItemRaw(
   imageUrl: String,
   title: String,
   caption: String,
   amount: String,
+  modifier: Modifier = Modifier
 ) {
   val dark = isSystemInDarkTheme()
 
   Box(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
       .height(175.dp)
       .clip(RoundedCornerShape(16.dp))

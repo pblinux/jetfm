@@ -31,13 +31,14 @@ class LastfmApiClient {
   private val api = "https://ws.audioscrobbler.com/2.0"
 
   // URIs
+  private val favTracks = "/?method=user.getlovedtracks&format=json"
+  private val friends = "/?method=user.getfriends&format=json"
   private val infoUser = "/?method=user.getInfo&format=json"
   private val login = "/?method=auth.getMobileSession&format=json"
   private val recentTracks = "/?method=user.getRecentTracks&format=json"
   private val topAlbums = "/?method=user.gettopalbums&format=json"
   private val topArtists = "/?method=user.gettopartists&format=json"
   private val topTracks = "/?method=user.gettoptracks&format=json"
-  private val favTracks = "/?method=user.getlovedtracks&format=json"
 
   init {
     try {
@@ -68,7 +69,7 @@ class LastfmApiClient {
   * Get user info
   * Retrieves user information
   * */
-  suspend fun getInfo(user: String): User? {
+  suspend fun getInfo(user: String): User {
     return supervisorScope {
       Fuel.get(
         api + infoUser,
@@ -77,7 +78,30 @@ class LastfmApiClient {
           Pair(first = "api_key", second = key),
         )
       ).awaitObjectResult(UserResult.Deserializer())
-        .fold(success = { it.user }, failure = { null })
+        .fold(success = { it.user }, failure = { throw Error(it.response.responseMessage) })
+    }
+  }
+
+  /*
+* Get user friends
+* Retrieves user friends information
+* */
+  suspend fun getFriends(user: String, page: Int = 1): Friends {
+    return supervisorScope {
+      Fuel.get(
+        api + friends,
+        parameters = listOf(
+          Pair(first = "user", second = user),
+          Pair(first = "api_key", second = key),
+          Pair("page", page)
+        )
+      ).awaitObjectResult(FriendsResult.Deserializer())
+        .fold(success = { it.friends }, failure = {
+          Log.d("JetFM: Error friends", it.response.statusCode.toString())
+          Log.d("JetFM: Error friends", it.response.responseMessage)
+          Log.d("JetFM: Error friends", it.message ?: "Error")
+          throw Error(it.response.responseMessage)
+        })
     }
   }
 
