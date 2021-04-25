@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 sealed class ResultState {
   object Uninitialized : ResultState()
   object Loading : ResultState()
+  object Refreshing : ResultState()
   object Error : ResultState()
   data class Loaded(val data: Any) : ResultState()
 }
@@ -96,11 +97,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   }
 
   // Get home screen info
-  fun getHome() {
+  fun getHome(refreshing: Boolean = false) {
     viewModelScope.launch {
       try {
         val user = getUser()
-        _home.emit(ResultState.Loading)
+        if (refreshing)
+          _home.emit(ResultState.Refreshing)
+        else
+          _home.emit(ResultState.Loading)
         coroutineScope {
           val recentTracks = async { api.getRecentTracks(user) }
           val topWeeklyArtists = async { api.getTopPeriodArtists(user) }

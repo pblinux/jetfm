@@ -1,6 +1,7 @@
 package gt.com.pixela.jetfm.ui.composables.home
 
 import android.text.Layout
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.models.Album
 import gt.com.pixela.jetfm.data.models.Artist
 import gt.com.pixela.jetfm.data.models.Track
@@ -38,7 +41,7 @@ private fun HistoryTrackPreview() {
 @Composable
 fun HistoryArtistItem(artist: Artist) {
   HistoryItemRaw(
-    imageUrl = artist.image.single { it.size == "large" }.url,
+    imageUrl = artist.image.single { it.size == "extralarge" }.url,
     title = artist.name,
     caption = "",
     amount = "${artist.playCount}"
@@ -48,7 +51,7 @@ fun HistoryArtistItem(artist: Artist) {
 @Composable
 fun HistoryAlbumItem(album: Album) {
   HistoryItemRaw(
-    imageUrl = album.image.single { it.size == "large" }.url,
+    imageUrl = album.image.single { it.size == "extralarge" }.url,
     title = album.name,
     caption = "by ${album.artist.name}",
     amount = "${album.playCount}"
@@ -58,7 +61,7 @@ fun HistoryAlbumItem(album: Album) {
 @Composable
 fun HistoryTrackItem(track: Track) {
   HistoryItemRaw(
-    imageUrl = track.image.single { it.size == "large" }.url,
+    imageUrl = track.image.single { it.size == "extralarge" }.url,
     title = track.name,
     caption = "by ${track.artist.name}",
     amount = "${track.playCount}"
@@ -68,7 +71,7 @@ fun HistoryTrackItem(track: Track) {
 @Composable
 fun LovedTrackItem(track: Track) {
   HistoryItemRaw(
-    imageUrl = track.image.single { it.size == "large" }.url,
+    imageUrl = track.image.single { it.size == "extralarge" }.url,
     title = track.name,
     caption = track.date!!.date,
     amount = ""
@@ -101,10 +104,13 @@ private fun HistoryItemRaw(
       .clip(RoundedCornerShape(16.dp))
       .background(color = if (dark) Color.Black else Color.White)
   ) {
-    CoilImage(
-      data = imageUrl,
+    Image(
+      painter = rememberCoilPainter(
+        imageUrl,
+        fadeIn = true,
+        previewPlaceholder = R.drawable.ic_launcher_background
+      ),
       contentDescription = title,
-      fadeIn = true,
       contentScale = ContentScale.Crop,
       modifier = Modifier.fillMaxSize()
     )

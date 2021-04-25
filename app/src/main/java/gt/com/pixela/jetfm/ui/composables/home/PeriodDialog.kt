@@ -20,9 +20,9 @@ fun PeriodDialog(onDismiss: () -> Unit) {
   AlertDialog(onDismissRequest = onDismiss,
     title = { Text(text = "Choose a period") },
     text = {
-      Column {
+      Column(Modifier.padding(top = 8.dp)) {
         Period.values().forEach {
-          PeriodDialogItem(isSelected = it == current, text = it.value) { current = it }
+          PeriodDialogItem(isSelected = it == current, text = it.name) { current = it }
         }
       }
     },

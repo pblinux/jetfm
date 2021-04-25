@@ -1,5 +1,6 @@
 package gt.com.pixela.jetfm.ui.composables.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.coil.CoilImage
+import com.google.accompanist.coil.rememberCoilPainter
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.models.Artist
 
 @Preview
@@ -49,10 +51,13 @@ private fun ColumnItemRaw(
       .fillMaxWidth()
       .height(150.dp)
   ) {
-    CoilImage(
-      data = imageUrl,
+    Image(
+      painter = rememberCoilPainter(
+        imageUrl,
+        fadeIn = true,
+        previewPlaceholder = R.drawable.ic_launcher_background
+      ),
       contentDescription = name,
-      fadeIn = true,
       contentScale = ContentScale.Crop,
       modifier = Modifier.fillMaxSize()
     )
