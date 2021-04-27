@@ -1,15 +1,13 @@
 package gt.com.pixela.jetfm.data.vm
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import dagger.hilt.android.lifecycle.HiltViewModel
 import gt.com.pixela.jetfm.data.models.*
 import gt.com.pixela.jetfm.data.source.*
 import kotlinx.coroutines.async
@@ -17,19 +15,27 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-sealed class ResultState {
-  object Uninitialized : ResultState()
-  object Loading : ResultState()
-  object Refreshing : ResultState()
-  object Error : ResultState()
-  data class Loaded(val data: Any) : ResultState()
-}
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+  private val apiClient: LastfmApiClient,
+  private val storeManager: DataStoreManager,
+  application: Application,
+) : AndroidViewModel(application) {
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
-  // LastFM data source
-  private val api = LastfmApiClient()
+  init {
+    viewModelScope.launch {
+      storeManager.user.collect {
+        if (!::_user.isInitialized) {
+          _user = MutableStateFlow(it)
+        }
+        _user.emit(it)
+      }
+    }
+  }
 
   // Selected period
   private val _period = MutableStateFlow(Period.Weekly)
@@ -42,6 +48,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   private val _barElevated = MutableStateFlow(false)
   val barElevated = _barElevated.asStateFlow()
 
+  // Current user
+  private lateinit var _user: MutableStateFlow<String>
+
   // Home info
   private val _home = MutableStateFlow<ResultState>(ResultState.Uninitialized)
   val home = _home.asStateFlow()
@@ -52,24 +61,24 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
   // History
   var tracks: Flow<PagingData<Track>> =
-    Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(api, getUser(), _period.value) }
+    Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(apiClient, _user.value, _period.value) }
       .flow.cachedIn(viewModelScope)
 
   var artists: Flow<PagingData<Artist>> =
-    Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(api, getUser(), _period.value) }
+    Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(apiClient, _user.value, _period.value) }
       .flow.cachedIn(viewModelScope)
 
   var albums: Flow<PagingData<Album>> =
-    Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(api, getUser(), _period.value) }
+    Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(apiClient, _user.value, _period.value) }
       .flow.cachedIn(viewModelScope)
 
   val lovedTracks: Flow<PagingData<Track>> =
-    Pager(PagingConfig(pageSize = 10)) { PaginatedLovedTracks(api, getUser()) }
+    Pager(PagingConfig(pageSize = 10)) { PaginatedLovedTracks(apiClient, _user.value) }
       .flow.cachedIn(viewModelScope)
 
   // Profile friends
   val friends: Flow<PagingData<User>> =
-    Pager(PagingConfig(pageSize = 10)) { PaginatedFriends(api, getUser()) }
+    Pager(PagingConfig(pageSize = 10)) { PaginatedFriends(apiClient, _user.value) }
       .flow.cachedIn(viewModelScope)
 
 
@@ -100,16 +109,16 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   fun getHome(refreshing: Boolean = false) {
     viewModelScope.launch {
       try {
-        val user = getUser()
+        val user = _user.value
         if (refreshing)
-          _home.emit(ResultState.Refreshing)
+          _home.emit(ResultState.Refreshing((_home.value as ResultState.Loaded).data))
         else
           _home.emit(ResultState.Loading)
         coroutineScope {
-          val recentTracks = async { api.getRecentTracks(user) }
-          val topWeeklyArtists = async { api.getTopPeriodArtists(user) }
-          val topWeeklyAlbums = async { api.getTopPeriodAlbums(user) }
-          val topWeeklyTracks = async { api.getTopPeriodTracks(user) }
+          val recentTracks = async { apiClient.getRecentTracks(user) }
+          val topWeeklyArtists = async { apiClient.getTopPeriodArtists(user) }
+          val topWeeklyAlbums = async { apiClient.getTopPeriodAlbums(user) }
+          val topWeeklyTracks = async { apiClient.getTopPeriodTracks(user) }
           _home.emit(
             ResultState.Loaded(
               HomeInfo(
@@ -133,7 +142,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
       try {
         _profile.emit(ResultState.Loading)
         coroutineScope {
-          val userInfo = async { api.getInfo(getUser()) }
+          val userInfo = async { apiClient.getInfo(_user.value) }
           _profile.emit(ResultState.Loaded(ProfileInfo(userInfo.await())))
         }
       } catch (e: Error) {
@@ -145,38 +154,40 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
   // Reload tracks when period changed
   fun reloadTracks() {
     tracks =
-      Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(api, getUser(), _period.value) }
+      Pager(PagingConfig(pageSize = 10)) { PaginatedTracks(apiClient, _user.value, _period.value) }
         .flow.cachedIn(viewModelScope)
   }
 
   // Reload tracks when period changed
   fun reloadArtists() {
     artists =
-      Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(api, getUser(), _period.value) }
+      Pager(PagingConfig(pageSize = 10)) { PaginatedArtists(apiClient, _user.value, _period.value) }
         .flow.cachedIn(viewModelScope)
   }
 
   // Reload tracks when period changed
   fun reloadAlbums() {
     albums =
-      Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(api, getUser(), _period.value) }
+      Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(apiClient, _user.value, _period.value) }
         .flow.cachedIn(viewModelScope)
   }
 
-  // Get current user
-  private fun getUser(): String {
-    return with(sharedPreferences) { getString("user", "") ?: run { "" } }
-  }
+//  // Get current user
+//  private fun getUser(): String {
+//
+//
+//    return with(sharedPreferences) { getString("user", "") ?: run { "" } }
+//  }
 
   // Our shared preference
-  private val sharedPreferences by lazy {
-    val key = MasterKey.Builder(application)
-      .setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
-
-    EncryptedSharedPreferences.create(
-      application, "jetfm_secret_preferences", key,
-      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
-  }
+//  private val sharedPreferences by lazy {
+//    val key = MasterKey.Builder(application)
+//      .setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+//
+//    EncryptedSharedPreferences.create(
+//      application, "jetfm_secret_preferences", key,
+//      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//    )
+//  }
 }

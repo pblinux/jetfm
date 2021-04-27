@@ -46,10 +46,14 @@ fun Dashboard() {
       ResultState.Uninitialized -> UninitializedView()
       ResultState.Loading -> LoadingView()
       ResultState.Error -> ErrorView {}
-      ResultState.Refreshing -> {
-      }
-      is ResultState.Loaded -> {
-        val loadedData = (homeState as ResultState.Loaded).data as HomeInfo
+      is ResultState.Refreshing, is ResultState.Loaded -> {
+
+        val loadedData = if (homeState is ResultState.Loaded) {
+          (homeState as ResultState.Loaded).data as HomeInfo
+        } else {
+          (homeState as ResultState.Refreshing).current as HomeInfo
+        }
+
 
         LazyColumn(
           state = scrollState,

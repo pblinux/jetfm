@@ -38,13 +38,11 @@ fun InfoHeader(user: User) {
     ) {
       Text(
         user.realname,
-//        color = Color.White,
         style = MaterialTheme.typography.h4,
       )
       Spacer(Modifier.height(4.dp))
       Text(
         user.name,
-//        color = Color.White,
         style = MaterialTheme.typography.h6,
       )
       Spacer(Modifier.height(8.dp))
@@ -71,7 +69,6 @@ fun InfoItem(number: Int, description: String) {
     Spacer(Modifier.height(2.dp))
     Text(
       description,
-//      color = Color.White,
       style = MaterialTheme.typography.subtitle2,
     )
   }

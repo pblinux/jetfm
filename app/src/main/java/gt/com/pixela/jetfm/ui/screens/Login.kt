@@ -1,22 +1,23 @@
 package gt.com.pixela.jetfm.ui.screens
 
-import gt.com.pixela.jetfm.R
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.navigate
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.vm.LoginState
 import gt.com.pixela.jetfm.ui.composables.animations.JetCircles
 import gt.com.pixela.jetfm.ui.composables.common.*
@@ -25,8 +26,11 @@ import gt.com.pixela.jetfm.ui.theme.black
 import gt.com.pixela.jetfm.utils.COLUMN_HORIZONTAL_PADDING
 import gt.com.pixela.jetfm.utils.LocalLoginViewModel
 import gt.com.pixela.jetfm.utils.LocalMainNavigator
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
+@ExperimentalComposeUiApi
 @Preview
 @Composable
 fun Login() {
@@ -34,22 +38,26 @@ fun Login() {
   val loginState by loginViewModel.currentState.collectAsState()
   val mainNavigator = LocalMainNavigator.current
   val scaffoldState = rememberScaffoldState()
-  val scope = rememberCoroutineScope()
 
-  when (loginState) {
-    LoginState.Error -> {
-      scope.launch {
-        scaffoldState.snackbarHostState.showSnackbar("Error", "Action", SnackbarDuration.Short)
+  LaunchedEffect(loginState) {
+    when (loginState) {
+      LoginState.Error -> {
+        launch {
+          scaffoldState.snackbarHostState.showSnackbar("Error", "Action", SnackbarDuration.Short)
+        }
       }
-    }
-    is LoginState.Loaded -> {
-      loginViewModel.saveSession(
-        (loginState as LoginState.Loaded).username,
-        (loginState as LoginState.Loaded).key
-      )
-      mainNavigator.navigate("home")
-    }
-    else -> {
+      is LoginState.Loaded -> {
+        val saveSession = async {
+          loginViewModel.saveSession(
+            (loginState as LoginState.Loaded).username,
+            (loginState as LoginState.Loaded).key
+          )
+        }
+        saveSession.await()
+        mainNavigator.navigate("home")
+      }
+      else -> {
+      }
     }
   }
 
