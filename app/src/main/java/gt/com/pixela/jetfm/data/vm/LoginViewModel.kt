@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gt.com.pixela.jetfm.data.source.DataStoreManager
 import gt.com.pixela.jetfm.data.source.LastfmApiClient
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,27 +45,14 @@ class LoginViewModel @Inject constructor(
       _state.emit(LoginState.Loading)
       val result = apiClient.login(_username.value, _password.value)
       result?.let {
+        val session = async { saveSession(it.session.name, it.session.key) }
+        session.await()
         _state.emit(LoginState.Loaded(it.session.name, it.session.key))
       } ?: run { _state.emit(LoginState.Error) }
     }
   }
 
-  fun saveSession(username: String, key: String) {
-    viewModelScope.launch {
-      storeManager.onLogin(username, key)
-    }
-//    val preferences = EncryptedSharedPreferences.create(
-//      "jetfm_secret_preferences",
-//      MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
-//      getApplication(),
-//      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//    )
-//
-//    with(preferences.edit()) {
-//      putString("user", username)
-//      putString("key", key)
-//      commit()
-//    }
+  private suspend fun saveSession(username: String, key: String) {
+    storeManager.onLogin(username, key)
   }
 }

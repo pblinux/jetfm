@@ -45,8 +45,8 @@ fun JetAudioBars(
 
 @Composable
 private fun JetAudioBarAnimated(width: Dp, maxHeight: Dp, color: Color = Color.Green) {
-  val duration by remember { mutableStateOf(Random.nextInt(600, 800)) }
-  val delay by remember { mutableStateOf(Random.nextInt(200, 400)) }
+  val duration by remember { mutableStateOf(Random.nextInt(500, 700)) }
+  val delay by remember { mutableStateOf(Random.nextInt(100, 300)) }
   val infiniteTransition = rememberInfiniteTransition()
   val animation by infiniteTransition.animateFloat(
     initialValue = 0.10f,

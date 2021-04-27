@@ -27,6 +27,7 @@ import gt.com.pixela.jetfm.utils.COLUMN_HORIZONTAL_PADDING
 import gt.com.pixela.jetfm.utils.LocalLoginViewModel
 import gt.com.pixela.jetfm.utils.LocalMainNavigator
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -47,13 +48,6 @@ fun Login() {
         }
       }
       is LoginState.Loaded -> {
-        val saveSession = async {
-          loginViewModel.saveSession(
-            (loginState as LoginState.Loaded).username,
-            (loginState as LoginState.Loaded).key
-          )
-        }
-        saveSession.await()
         mainNavigator.navigate("home")
       }
       else -> {

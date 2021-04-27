@@ -1,6 +1,7 @@
 package gt.com.pixela.jetfm.data.vm
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -131,6 +132,7 @@ class HomeViewModel @Inject constructor(
           )
         }
       } catch (e: Error) {
+        Log.d("Home", e.message.toString())
         _home.emit(ResultState.Error)
       }
     }
