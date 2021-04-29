@@ -1,11 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "gt.com.pixela.jetfm"
@@ -36,33 +37,44 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.4.0'
+        kotlinCompilerVersion '1.4.31'
     }
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
+    // Kotlin
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3'
+    // Android dependencies
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+    // Compose
+    implementation "androidx.activity:activity-compose:1.3.0-alpha07"
     implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.ui:ui-tooling:$compose_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha07'
-    // App dependencies
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.compose.runtime:runtime:$compose_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04"
+    implementation "androidx.navigation:navigation-compose:1.0.0-alpha10"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha08"
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    // Others
+    implementation "com.google.accompanist:accompanist-coil:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.7.1"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
     implementation "com.squareup.moshi:moshi-kotlin:1.9.3"
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.2.1"
-    implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.2.0'
-    implementation 'com.github.kittinunf.fuel:fuel:2.2.0'
-    implementation 'com.github.zsoltk:compose-router:0.18.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
-
+    implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.3.1'
+    implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
+    implementation "androidx.datastore:datastore-preferences:1.0.0-beta01"
+    // Test
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

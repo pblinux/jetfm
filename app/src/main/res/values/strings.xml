@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Jetfm</string>
+    <string name="activity">Activity</string>
+    <string name="app_name">JetFM</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="enter_label">Enter</string>
+    <string name="password_hint">******</string>
+    <string name="password_label">Password</string>
+    <string name="profile">Profile</string>
+    <string name="tagline">A last.fm client powered by Jetpack Compose</string>
+    <string name="title">jet.FM</string>
+    <string name="title_activity_home">JetFM</string>
+    <string name="title_activity_splash">JetFM</string>
+    <string name="username_hint">user</string>
+    <string name="username_label">Username</string>
 </resources>
