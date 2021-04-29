@@ -66,7 +66,6 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     // Others
-    implementation "androidx.preference:preference-ktx:1.1.1"
     implementation "com.google.accompanist:accompanist-coil:$accompanist_version"
     implementation "com.google.accompanist:accompanist-flowlayout:0.7.1"
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
