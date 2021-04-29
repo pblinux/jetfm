@@ -1,4 +1,5 @@
 # JetFM
+![JetFM](https://raw.githubusercontent.com/pblinux/jetfm/master/images/jetfm.png)
 A basic Last.fm client made with Jetpack compose (and a little free time).
 
 This project serves as an example and a bit of experimentation with Jetpack Compose.
@@ -10,8 +11,8 @@ This project serves as an example and a bit of experimentation with Jetpack Comp
 
 ## Dashboard
 <p float="left">
-<img src="https://raw.githubusercontent.com/pblinux/jetfm/master/images/dashboard.png" width="150">
-<img  src="https://raw.githubusercontent.com/pblinux/jetfm/master/images/dashboard-dark.png" width="150">
+<img src="https://raw.githubusercontent.com/pblinux/jetfm/master/images/home.png" width="150">
+<img  src="https://raw.githubusercontent.com/pblinux/jetfm/master/images/home-dark.png" width="150">
 </p>
 
 <p float="left">
