@@ -1,8 +1,10 @@
 package gt.com.pixela.jetfm.data.source
 
+import android.content.Context
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.coroutines.awaitObjectResult
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.models.User
 import gt.com.pixela.jetfm.data.models.response.*
 import gt.com.pixela.jetfm.data.models.results.*
@@ -20,12 +22,12 @@ enum class Period(val value: String) {
   Yearly("12month"),
 }
 
-class LastfmApiClient {
+class LastfmApiClient(val context: Context) {
   private lateinit var digest: MessageDigest
 
   // API Key
-  private val key = "138be6b4c964880703bfc4e67add1a3f"
-  private val secret = "7c14e71ea8e662db2d7a425765f67d41"
+  private val key = context.getString(R.string.lastfm_key)
+  private val secret = context.getString(R.string.lastfm_secret)
 
   //  Base URLs
   private val api = "https://ws.audioscrobbler.com/2.0"
