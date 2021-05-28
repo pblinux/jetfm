@@ -7,9 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import gt.com.pixela.jetfm.data.source.DataStoreManager
 import gt.com.pixela.jetfm.ui.screens.Splash
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalPagerApi
 @ExperimentalAnimatedInsets
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi

@@ -112,7 +112,7 @@ class HomeViewModel @Inject constructor(
       try {
         val user = _user.value
         if (refreshing)
-          _home.emit(ResultState.Refreshing((_home.value as ResultState.Loaded).data))
+          _home.emit(ResultState.Refreshing((_home.value as ResultState.Loaded<*>).data))
         else
           _home.emit(ResultState.Loading)
         coroutineScope {
@@ -132,8 +132,8 @@ class HomeViewModel @Inject constructor(
           )
         }
       } catch (e: Error) {
-        Log.d("Home", e.message.toString())
-        _home.emit(ResultState.Error)
+        Log.e("JetFM", e.message.toString())
+        _home.emit(ResultState.Error(e.message.toString()))
       }
     }
   }
@@ -148,7 +148,7 @@ class HomeViewModel @Inject constructor(
           _profile.emit(ResultState.Loaded(ProfileInfo(userInfo.await())))
         }
       } catch (e: Error) {
-        _profile.emit(ResultState.Error)
+        _profile.emit(ResultState.Error(e.message.toString()))
       }
     }
   }
@@ -173,23 +173,4 @@ class HomeViewModel @Inject constructor(
       Pager(PagingConfig(pageSize = 10)) { PaginatedAlbums(apiClient, _user.value, _period.value) }
         .flow.cachedIn(viewModelScope)
   }
-
-//  // Get current user
-//  private fun getUser(): String {
-//
-//
-//    return with(sharedPreferences) { getString("user", "") ?: run { "" } }
-//  }
-
-  // Our shared preference
-//  private val sharedPreferences by lazy {
-//    val key = MasterKey.Builder(application)
-//      .setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
-//
-//    EncryptedSharedPreferences.create(
-//      application, "jetfm_secret_preferences", key,
-//      EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//      EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//    )
-//  }
 }

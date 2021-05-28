@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.source.LastfmApiClient
 
 @Module
@@ -14,6 +15,9 @@ object LastFMModule {
 
   @Provides
   fun provideLastFMService(@ApplicationContext context: Context): LastfmApiClient {
-    return LastfmApiClient(context)
+    return LastfmApiClient(
+      context.getString(R.string.lastfm_key),
+      context.getString(R.string.lastfm_secret)
+    )
   }
 }

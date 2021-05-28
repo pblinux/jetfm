@@ -2,6 +2,7 @@ package gt.com.pixela.jetfm.data.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gt.com.pixela.jetfm.data.source.DataStoreManager
@@ -17,8 +18,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
   private val apiClient: LastfmApiClient,
   private val storeManager: DataStoreManager,
-  application: Application
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
   // For UI state handling
   private val _state = MutableStateFlow<LoginState>(LoginState.Uninitialized)

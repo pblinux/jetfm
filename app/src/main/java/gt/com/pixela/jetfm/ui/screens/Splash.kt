@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import gt.com.pixela.jetfm.ui.theme.JetfmTheme
 import gt.com.pixela.jetfm.ui.theme.primaryRed
@@ -12,7 +13,11 @@ import gt.com.pixela.jetfm.ui.theme.primaryRed
 @Composable
 fun Splash() {
   JetfmTheme() {
-    Surface(color = primaryRed, modifier = Modifier.fillMaxSize()) {
+    Surface(
+      color = primaryRed, modifier = Modifier
+        .fillMaxSize()
+        .testTag("splash")
+    ) {
     }
   }
 }

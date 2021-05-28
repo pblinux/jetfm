@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.navigate
 import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.vm.LoginState
 import gt.com.pixela.jetfm.ui.composables.animations.JetCircles

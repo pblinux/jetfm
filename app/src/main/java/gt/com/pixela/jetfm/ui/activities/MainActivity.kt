@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import gt.com.pixela.jetfm.data.vm.HomeViewModel
 import gt.com.pixela.jetfm.data.vm.LoginViewModel
@@ -27,6 +28,7 @@ import gt.com.pixela.jetfm.utils.LocalMainNavigator
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
+@ExperimentalPagerApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
   private val loginViewModel by viewModels<LoginViewModel>()

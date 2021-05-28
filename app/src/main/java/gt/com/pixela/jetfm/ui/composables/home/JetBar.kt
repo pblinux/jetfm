@@ -2,7 +2,6 @@ package gt.com.pixela.jetfm.ui.composables.home
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +44,6 @@ fun JetBar(elevated: Boolean = false, screen: HomeScreen) {
       if (screen is HomeScreen.Activity)
         AnimatedVisibility(
           visible = true,
-          initiallyVisible = false,
           enter = fadeIn() + slideInHorizontally(initialOffsetX = { 40 }),
           exit = fadeOut() + shrinkOut()
         ) {

@@ -14,7 +14,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.ui.composables.home.JetBar
 import gt.com.pixela.jetfm.ui.composables.home.PeriodDialog
@@ -31,6 +35,7 @@ sealed class HomeScreen(val route: String, @StringRes val screenId: Int) {
 
 val screens = listOf(HomeScreen.Dashboard, HomeScreen.Activity, HomeScreen.Profile)
 
+@ExperimentalPagerApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
@@ -46,7 +51,7 @@ fun Home() {
     bottomBar = {
       BottomNavigation {
         val navBackStackEntry by homeNavigationController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
+        val currentRoute = navBackStackEntry?.destination?.route
         screens.forEach { screen ->
           BottomNavigationItem(
             icon = {
@@ -63,7 +68,9 @@ fun Home() {
             selected = currentRoute == screen.route,
             onClick = {
               homeNavigationController.navigate(screen.route) {
-                popUpTo = homeNavigationController.graph.startDestination
+                popUpTo(homeNavigationController.graph.startDestinationRoute!!) {
+                  saveState = true
+                }
                 launchSingleTop = true
               }
               homeViewModel.updateBarElevation(0)
@@ -93,10 +100,9 @@ fun Home() {
 
 @ExperimentalAnimationApi
 @Composable
-fun SwitchAnimation(content: @Composable () -> Unit) {
+fun SwitchAnimation(content: @Composable (AnimatedVisibilityScope.() -> Unit)) {
   AnimatedVisibility(
     visible = true,
-    initiallyVisible = false,
     enter = slideInVertically(
       initialOffsetY = { -40 }
     ) + expandVertically(
