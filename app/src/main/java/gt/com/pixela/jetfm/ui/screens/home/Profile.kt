@@ -7,8 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -37,9 +37,9 @@ fun Profile() {
   when (profileState) {
     ResultState.Uninitialized -> UninitializedView()
     ResultState.Loading -> LoadingView()
-    ResultState.Error -> ErrorView {}
-    is ResultState.Loaded -> {
-      val loadedData = (profileState as ResultState.Loaded).data as ProfileInfo
+    is ResultState.Error -> ErrorView {}
+    is ResultState.Loaded<*> -> {
+      val loadedData = (profileState as ResultState.Loaded<*>).data as ProfileInfo
 
       LazyColumn(
         state = scrollState,
@@ -75,5 +75,6 @@ fun Profile() {
         item { Spacer(Modifier.height(40.dp)) }
       }
     }
+    else -> {}
   }
 }

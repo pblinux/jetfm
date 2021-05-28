@@ -6,10 +6,14 @@
     <string name="password_hint">******</string>
     <string name="password_label">Password</string>
     <string name="profile">Profile</string>
+    <string name="recently_played">Recently played tracks</string>
     <string name="tagline">A last.fm client powered by Jetpack Compose</string>
     <string name="title">jet.FM</string>
     <string name="title_activity_home">JetFM</string>
     <string name="title_activity_splash">JetFM</string>
+    <string name="top_albums">Your weekly\'s top albums</string>
+    <string name="top_artists">Your top artists for the week</string>
+    <string name="top_tracks">Top tracks for this week</string>
     <string name="username_hint">user</string>
     <string name="username_label">Username</string>
 </resources>

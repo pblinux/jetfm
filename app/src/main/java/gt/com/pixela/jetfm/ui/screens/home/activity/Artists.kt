@@ -16,11 +16,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import gt.com.pixela.jetfm.data.models.Artist
-import gt.com.pixela.jetfm.data.models.Track
 import gt.com.pixela.jetfm.ui.composables.common.LoadingItem
 import gt.com.pixela.jetfm.ui.composables.common.LoadingView
 import gt.com.pixela.jetfm.ui.composables.home.HistoryArtistItem
-import gt.com.pixela.jetfm.ui.composables.home.HistoryTrackItem
 import gt.com.pixela.jetfm.utils.LocalHomeViewModel
 
 @Composable

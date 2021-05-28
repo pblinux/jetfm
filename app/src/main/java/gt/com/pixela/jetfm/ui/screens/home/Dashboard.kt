@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import gt.com.pixela.jetfm.R
 import gt.com.pixela.jetfm.data.models.HomeInfo
 import gt.com.pixela.jetfm.data.vm.ResultState
 import gt.com.pixela.jetfm.ui.composables.common.ErrorView
@@ -33,7 +35,7 @@ fun Dashboard() {
   val homeViewModel = LocalHomeViewModel.current
   val homeState by homeViewModel.home.collectAsState()
   val scrollState = rememberLazyListState()
-  val isRefreshing = rememberSwipeRefreshState(isRefreshing = homeState is ResultState.Refreshing)
+  val isRefreshing = rememberSwipeRefreshState(isRefreshing = homeState is ResultState.Refreshing<*>)
 
   homeViewModel.updateBarElevation(scrollState.firstVisibleItemIndex)
 
@@ -45,13 +47,13 @@ fun Dashboard() {
     when (homeState) {
       ResultState.Uninitialized -> UninitializedView()
       ResultState.Loading -> LoadingView()
-      ResultState.Error -> ErrorView {}
-      is ResultState.Refreshing, is ResultState.Loaded -> {
+      is ResultState.Error -> ErrorView {}
+      is ResultState.Refreshing<*>, is ResultState.Loaded<*> -> {
 
-        val loadedData = if (homeState is ResultState.Loaded) {
-          (homeState as ResultState.Loaded).data as HomeInfo
+        val loadedData = if (homeState is ResultState.Loaded<*>) {
+          (homeState as ResultState.Loaded<*>).data as HomeInfo
         } else {
-          (homeState as ResultState.Refreshing).current as HomeInfo
+          (homeState as ResultState.Refreshing<*>).current as HomeInfo
         }
 
 
@@ -61,7 +63,7 @@ fun Dashboard() {
           // Recent tracks
           item {
             Text(
-              "Recently played tracks",
+              stringResource(id = R.string.recently_played),
               Modifier
                 .padding(horizontal = 16.dp)
                 .padding(top = 8.dp),
@@ -81,7 +83,7 @@ fun Dashboard() {
           // Top artists
           item {
             Text(
-              "Your top artists for the week",
+              stringResource(id = R.string.top_artists),
               Modifier
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp),
@@ -95,7 +97,7 @@ fun Dashboard() {
           // Top tracks
           item {
             Text(
-              "Top tracks for this week",
+              stringResource(id = R.string.top_tracks),
               Modifier
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp, top = 16.dp),
@@ -115,14 +117,14 @@ fun Dashboard() {
           // Top albums
           item {
             Text(
-              "Your weekly's top albums",
+              stringResource(id = R.string.top_albums),
               Modifier
                 .padding(horizontal = 16.dp, vertical = 16.dp),
               style = MaterialTheme.typography.h6,
             )
           }
           item {
-            BoxWithConstraints() {
+            BoxWithConstraints {
               FlowRow(
                 Modifier
                   .padding(horizontal = 16.dp),
