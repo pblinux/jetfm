@@ -1,0 +1,103 @@
+import tech.pixela.jetfm.Dependencies
+import tech.pixela.jetfm.Versions
+
+plugins {
+    id 'com.android.application'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+    id 'kotlinx-serialization'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "tech.pixela.jetfm"
+        minSdk 22
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Versions.Android.JetpackCompose.compose
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    /* Kotlin */
+    implementation Dependencies.Kotlin.kotlinx_serialization_json
+    /* Android */
+    // Base
+    implementation Dependencies.Android.Base.androidx_core
+    implementation Dependencies.Android.Base.androidx_lifecycle
+    // Jetpack
+    implementation Dependencies.Android.Jetpack.data_store
+    implementation Dependencies.Android.Jetpack.hilt_android
+    implementation Dependencies.Android.Jetpack.paging
+    kapt Dependencies.Android.Jetpack.hilt_compiler
+    // Jetpack Compose
+    implementation Dependencies.Android.JetpackCompose.activity
+    implementation Dependencies.Android.JetpackCompose.hilt_navigation
+    implementation Dependencies.Android.JetpackCompose.material2
+    implementation Dependencies.Android.JetpackCompose.material3
+    implementation Dependencies.Android.JetpackCompose.navigation
+    implementation Dependencies.Android.JetpackCompose.paging
+    implementation Dependencies.Android.JetpackCompose.tooling_preview
+    implementation Dependencies.Android.JetpackCompose.ui
+    implementation Dependencies.Android.JetpackCompose.view_model
+    /* Third-party */
+    //Accompanist
+    implementation Dependencies.ThirdParty.Accompanist.flow_layout
+    implementation Dependencies.ThirdParty.Accompanist.insets
+    implementation Dependencies.ThirdParty.Accompanist.pager
+    implementation Dependencies.ThirdParty.Accompanist.pager_indicators
+    implementation Dependencies.ThirdParty.Accompanist.system_ui
+    implementation Dependencies.ThirdParty.Accompanist.swipe_refresh
+    // Chucker
+    debugImplementation Dependencies.ThirdParty.Chucker.chucker_debug
+    releaseImplementation Dependencies.ThirdParty.Chucker.chucker_release
+    // Coil
+    implementation Dependencies.ThirdParty.coil
+    // Material motion
+    implementation Dependencies.ThirdParty.MaterialMotion.core
+    implementation Dependencies.ThirdParty.MaterialMotion.navigation
+    // SquareUp
+    implementation Dependencies.ThirdParty.SquareUp.okhttp
+    implementation Dependencies.ThirdParty.SquareUp.retrofit
+    implementation Dependencies.ThirdParty.SquareUp.retrofit_kotlinx_serialization
+    /* Test and debug */
+    androidTestImplementation Dependencies.Android.JetpackCompose.Testing.ui_testing
+    androidTestImplementation Dependencies.Android.Testing.espresso_androidx
+    androidTestImplementation Dependencies.Android.Testing.junit_androidx
+    debugImplementation Dependencies.Android.JetpackCompose.Testing.ui_test_manifest
+    debugImplementation Dependencies.Android.JetpackCompose.Testing.ui_tooling
+    testImplementation Dependencies.Kotlin.Testing.junit
+}

@@ -1,0 +1,27 @@
+<resources>
+    <string name="activity">Activity</string>
+    <string name="albums">Albums</string>
+    <string name="app_name">Jetfm</string>
+    <string name="artists">Artists</string>
+    <string name="cancel">Cancel</string>
+    <string name="choose_period">Choose a period</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="enter_label">Enter</string>
+    <string name="loved_tracks">Loved tracks</string>
+    <string name="ok">OK</string>
+    <string name="password_label">Password</string>
+    <string name="profile">Profile</string>
+    <string name="recently_played">Recently played tracks</string>
+    <string name="tagline">A last.fm client powered by Jetpack Compose</string>
+    <string name="title">jet.FM</string>
+    <string name="top_albums">Your weekly\'s top albums</string>
+    <string name="top_artists">Your top artists for the week</string>
+    <string name="top_tracks">Top tracks for this week</string>
+    <string name="tracks">Tracks</string>
+    <string name="username_label">Username</string>
+    <string name="scrobbles">Scrobbles</string>
+    <string name="subscribers">Subscribers</string>
+    <string name="playlists">Playlists</string>
+    <string name="your_friends">Your friends:</string>
+    <string name="your_profile">Your last.fm profile and info</string>
+</resources>
