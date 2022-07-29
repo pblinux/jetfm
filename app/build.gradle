@@ -42,7 +42,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion Versions.Android.JetpackCompose.compose
+        kotlinCompilerExtensionVersion Versions.Android.JetpackCompose.compiler
     }
     packagingOptions {
         resources {

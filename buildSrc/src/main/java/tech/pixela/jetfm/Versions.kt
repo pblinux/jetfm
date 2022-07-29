@@ -24,9 +24,10 @@ object Versions {
 
         object JetpackCompose {
             const val activity = "1.4.0"
+            const val compiler = "1.2.0"
             const val compose = "1.1.0-rc01"
             const val hilt_navigation = "1.0.0-rc01"
-            const val material3 = "1.0.0-alpha02"
+            const val material3 = "1.0.0-alpha04"
             const val navigation = "2.4.0-rc01"
             const val paging = "1.0.0-alpha14"
             const val view_model = "2.4.0"

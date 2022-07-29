@@ -14,5 +14,5 @@
 .cxx
 local.properties
 app/src/main/java/tech/pixela/jetfm/utils/general/Constants.kt
-buildSrc/build
+buildSrc/build/*
 buildSrc/.gradle
