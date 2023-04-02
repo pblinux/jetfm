@@ -1,10 +1,11 @@
 package tech.pixela.jetfm.ui.composables.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import coil.compose.rememberImagePainter
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import tech.pixela.jetfm.R
 
@@ -14,21 +15,17 @@ fun JetImage(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     contentScale: ContentScale = ContentScale.Crop,
-    circular: Boolean = false,
+    circular: Boolean = false
 ) {
-    Image(
-        painter = rememberImagePainter(
-            data = url,
-            builder = {
-                crossfade(true)
-                error(R.drawable.fallback)
-                if (circular) {
-                    transformations(CircleCropTransformation())
-                }
-            },
-        ),
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(url)
+            .crossfade(true)
+            .error(R.drawable.fallback)
+            .transformations(if (circular) listOf(CircleCropTransformation()) else listOf())
+            .build(),
         contentDescription = contentDescription,
         modifier = modifier,
-        contentScale = contentScale,
+        contentScale = contentScale
     )
 }

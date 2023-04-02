@@ -3,7 +3,6 @@ package tech.pixela.jetfm.ui.composables.common
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,12 +27,14 @@ private fun PreviewJetField() {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun JetField(
-    value: String, label: String, onValueChange: (String) -> Unit,
+    value: String,
+    label: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     focus: FocusRequester = FocusRequester(),
     isPassword: Boolean = false,
     onNext: (() -> Unit)? = null,
-    nextFocus: FocusRequester? = null,
+    nextFocus: FocusRequester? = null
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -48,7 +49,7 @@ fun JetField(
         label = {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium
             )
         },
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,

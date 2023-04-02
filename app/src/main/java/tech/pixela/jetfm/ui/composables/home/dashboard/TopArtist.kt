@@ -11,6 +11,6 @@ fun TopArtist(artist: Artist, modifier: Modifier = Modifier) {
         count = artist.playCount,
         imageUrl = artist.image.single { it.size == "mega" }.url,
         modifier = modifier,
-        text = artist.name,
+        text = artist.name
     )
 }

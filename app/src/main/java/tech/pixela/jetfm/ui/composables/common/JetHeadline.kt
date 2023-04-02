@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 fun JetHeadline(
     text: String,
     modifier: Modifier = Modifier,
-    textAlign: TextAlign = TextAlign.Left,
+    textAlign: TextAlign = TextAlign.Left
 ) {
     Text(
         text = text,

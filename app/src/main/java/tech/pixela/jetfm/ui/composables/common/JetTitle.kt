@@ -22,6 +22,6 @@ fun JetTitle(
         color = MaterialTheme.colorScheme.primary,
         textAlign = textAlign,
         fontWeight = FontWeight.SemiBold,
-        modifier = modifier,
+        modifier = modifier
     )
 }

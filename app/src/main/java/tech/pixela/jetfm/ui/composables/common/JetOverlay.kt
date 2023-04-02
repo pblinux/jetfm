@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun JetOverlay(
     isDark: Boolean = isSystemInDarkTheme(),
-    color: Color = Color.Black,
+    color: Color = Color.Black
 ) {
     Box(
         modifier = Modifier

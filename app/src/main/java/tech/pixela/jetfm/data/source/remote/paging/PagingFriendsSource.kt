@@ -7,7 +7,7 @@ import tech.pixela.jetfm.data.source.remote.lastfm.LastfmSource
 
 class PagingFriendsSource(
     private val lastfmSource: LastfmSource,
-    private val user: String,
+    private val user: String
 ) : PagingSource<Int, Friend>() {
     override fun getRefreshKey(state: PagingState<Int, Friend>): Int? {
         return state.anchorPosition
@@ -23,8 +23,12 @@ class PagingFriendsSource(
                         data = result.getOrThrow().friends.friends,
                         prevKey = null,
                         nextKey = if (
-                            next <= result.getOrThrow().friends.meta.totalPages) next.plus(1)
-                        else null
+                            next <= result.getOrThrow().friends.meta.totalPages
+                        ) {
+                            next.plus(1)
+                        } else {
+                            null
+                        }
                     )
                 }
                 false -> {

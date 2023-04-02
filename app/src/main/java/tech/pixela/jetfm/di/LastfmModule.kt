@@ -8,7 +8,6 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import retrofit2.Retrofit
-import tech.pixela.jetfm.R
 import tech.pixela.jetfm.data.repository.LastfmRepository
 import tech.pixela.jetfm.data.source.remote.lastfm.LastfmService
 import tech.pixela.jetfm.data.source.remote.lastfm.LastfmSource
@@ -22,7 +21,7 @@ import tech.pixela.jetfm.utils.general.Constants
 object LastfmModule {
     @Provides
     fun providesRetrofit(
-        @ApplicationContext applicationContext: Context,
+        @ApplicationContext applicationContext: Context
     ): Retrofit {
         return Retrofit.Builder()
             .client(providesHttpClient(applicationContext))
@@ -33,7 +32,7 @@ object LastfmModule {
 
     @Provides
     fun providesLastfmSource(
-        @ApplicationContext applicationContext: Context,
+        @ApplicationContext applicationContext: Context
     ): LastfmSource {
         return LastfmSource(
             providesRetrofit(applicationContext).create(LastfmService::class.java),
@@ -44,7 +43,7 @@ object LastfmModule {
 
     @Provides
     fun providesLastfmRepository(
-        @ApplicationContext applicationContext: Context,
+        @ApplicationContext applicationContext: Context
     ): LastfmRepository {
         return LastfmRepository(providesLastfmSource(applicationContext))
     }

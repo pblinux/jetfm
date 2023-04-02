@@ -2,16 +2,17 @@ package tech.pixela.jetfm.ui.screens
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.pager.ExperimentalPagerApi
-import soup.compose.material.motion.materialSharedAxisZIn
-import soup.compose.material.motion.materialSharedAxisZOut
+import soup.compose.material.motion.animation.materialSharedAxisZIn
+import soup.compose.material.motion.animation.materialSharedAxisZOut
 import soup.compose.material.motion.navigation.MaterialMotionNavHost
 import soup.compose.material.motion.navigation.composable
 import soup.compose.material.motion.navigation.rememberMaterialMotionNavController
@@ -22,7 +23,6 @@ import tech.pixela.jetfm.ui.screens.sections.Activity
 import tech.pixela.jetfm.ui.screens.sections.Dashboard
 import tech.pixela.jetfm.ui.screens.sections.Profile
 
-@ExperimentalPagerApi
 @ExperimentalAnimationApi
 @ExperimentalMaterial3Api
 @ExperimentalCoilApi
@@ -62,8 +62,9 @@ fun Home(
         MaterialMotionNavHost(
             navController,
             startDestination = JetRoute.Dashboard.route,
-            enterMotionSpec = { _, _ -> materialSharedAxisZIn() },
-            exitMotionSpec = { _, _ -> materialSharedAxisZOut() }
+            enterTransition = { materialSharedAxisZIn(true) },
+            exitTransition = { materialSharedAxisZOut(true) },
+            modifier = Modifier.padding(it)
         ) {
             items.map { item ->
                 composable(item.route) {

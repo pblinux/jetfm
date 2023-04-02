@@ -2,14 +2,11 @@ package tech.pixela.jetfm.ui.composables.home.dashboard
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import soup.compose.material.motion.animation.materialFadeIn
 import soup.compose.material.motion.animation.materialFadeOut
 
@@ -17,16 +14,15 @@ import soup.compose.material.motion.animation.materialFadeOut
 @Composable
 fun ScrollUpButton(
     visible: Boolean,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     AnimatedVisibility(
         visible = visible,
         enter = materialFadeIn(),
-        exit = materialFadeOut(),
-        modifier = Modifier.offset(y = (-80).dp)
+        exit = materialFadeOut()
     ) {
         FloatingActionButton(
-            onClick = onClick,
+            onClick = onClick
         ) { Icon(Icons.Filled.KeyboardArrowUp, null) }
     }
 }

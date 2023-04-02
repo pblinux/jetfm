@@ -23,4 +23,3 @@ data class RecentTrack(
         return "$name - ${artist.name} - ${album.name} - ${attributes?.isPlaying}"
     }
 }
-

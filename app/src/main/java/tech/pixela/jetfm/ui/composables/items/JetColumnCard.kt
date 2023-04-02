@@ -31,7 +31,7 @@ fun JetColumnCard(
     text: String,
     imageUrl: String,
     modifier: Modifier = Modifier,
-    count: Int? = null,
+    count: Int? = null
 ) {
     Card(
         modifier = modifier
@@ -40,8 +40,11 @@ fun JetColumnCard(
     ) {
         JetImage(url = imageUrl, modifier = Modifier.fillMaxSize())
         JetOverlay(
-            color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.outline
+            color = if (isSystemInDarkTheme()) {
+                MaterialTheme.colorScheme.surface
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
         )
         Box(
             modifier = Modifier
@@ -52,8 +55,11 @@ fun JetColumnCard(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onSurface
-                else MaterialTheme.colorScheme.inverseOnSurface,
+                color = if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.inverseOnSurface
+                },
                 modifier = Modifier.align(Alignment.BottomStart)
             )
             if (count != null) {
@@ -61,12 +67,14 @@ fun JetColumnCard(
                     text = "Your play count: $count",
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Medium,
-                    color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.inverseOnSurface,
+                    color = if (isSystemInDarkTheme()) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.inverseOnSurface
+                    },
                     modifier = Modifier.align(Alignment.TopEnd)
                 )
             }
         }
     }
-
 }

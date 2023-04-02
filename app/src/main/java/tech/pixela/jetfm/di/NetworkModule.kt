@@ -37,7 +37,7 @@ object NetworkModule {
 
     @Provides
     fun providesHttpClient(
-        @ApplicationContext applicationContext: Context,
+        @ApplicationContext applicationContext: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(providesChuckerClient(applicationContext))

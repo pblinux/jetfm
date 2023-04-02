@@ -5,21 +5,21 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class InnerRecentTrackArtist(
-  @SerialName("#text") val name: String,
-  @SerialName("mbid") val uid: String
+    @SerialName("#text") val name: String,
+    @SerialName("mbid") val uid: String
 )
 
 @Serializable
 data class InnerRecentTrackAlbum(
-  @SerialName("#text") val name: String,
-  @SerialName("mbid") val uid: String
+    @SerialName("#text") val name: String,
+    @SerialName("mbid") val uid: String
 )
 
 @Serializable
 data class InnerTrackArtist(
-  @SerialName("mbid") val uid: String,
-  val name: String,
-  val url: String
+    @SerialName("mbid") val uid: String,
+    val name: String,
+    val url: String
 )
 
 @Serializable

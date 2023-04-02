@@ -7,6 +7,6 @@ import tech.pixela.jetfm.data.model.lastfm.common.Meta
 
 @Serializable
 data class TopArtists(
-  @SerialName("@attr") val meta: Meta,
-  @SerialName("artist") val artists: List<Artist> = listOf()
+    @SerialName("@attr") val meta: Meta,
+    @SerialName("artist") val artists: List<Artist> = listOf()
 )

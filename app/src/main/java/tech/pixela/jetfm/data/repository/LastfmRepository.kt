@@ -30,7 +30,7 @@ class LastfmRepository @Inject constructor(
     suspend fun getHome(
         user: String,
         refresh: Boolean = false,
-        previousState: HomeHolder? = null,
+        previousState: HomeHolder? = null
     ): Flow<JetResult<HomeHolder>> {
         return getSingle(
             refresh = refresh,
@@ -62,7 +62,7 @@ class LastfmRepository @Inject constructor(
     suspend fun getProfile(
         user: String,
         refresh: Boolean = false,
-        previousState: UserResult? = null,
+        previousState: UserResult? = null
     ): Flow<JetResult<UserResult>> {
         return getSingle(
             refresh = refresh,
@@ -98,13 +98,14 @@ class LastfmRepository @Inject constructor(
     private suspend fun <T> getSingle(
         refresh: Boolean = false,
         previousState: T? = null,
-        operation: suspend () -> (Result<T>),
+        operation: suspend () -> (Result<T>)
     ): Flow<JetResult<T>> {
         return flow {
-            if (refresh && previousState != null)
+            if (refresh && previousState != null) {
                 emit(JetResult.Refresh(previousState))
-            else
+            } else {
                 emit(JetResult.Loading)
+            }
             val result = operation()
             when (result.isSuccess) {
                 true -> {

@@ -1,6 +1,9 @@
 package tech.pixela.jetfm.ui.composables.home.activity
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
@@ -25,7 +28,7 @@ import tech.pixela.jetfm.ui.composables.common.SmallJetSpace
 fun PeriodDialog(
     open: Boolean = false,
     onDismiss: () -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     var currentPeriod by remember { mutableStateOf(mainViewModel.currentPeriod.value) }
 
@@ -59,14 +62,13 @@ fun PeriodDialog(
             onDismissRequest = {}
         )
     }
-
 }
 
 @Composable
 fun PeriodItem(
     selected: Boolean,
     text: String,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -85,7 +87,7 @@ fun PeriodItem(
         SmallJetSpace()
         Text(
             text = text,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

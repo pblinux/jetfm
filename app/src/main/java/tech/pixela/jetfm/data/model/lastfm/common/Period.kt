@@ -6,5 +6,5 @@ enum class Period(val value: String) {
     Monthly("1month"),
     Trimester("3month"),
     Biannual("6month"),
-    Yearly("12month"),
+    Yearly("12month")
 }

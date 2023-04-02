@@ -23,13 +23,16 @@ import kotlin.random.Random
 @Preview
 @Composable
 private fun JetAudioBarPreview() {
-    JetAudioBars(width = 30.dp, maxHeight = 150.dp, amount = 4)
+    JetAudioBars(width = 30.dp, maxHeight = 150.dp, amount = 5)
 }
 
 @Composable
 fun JetAudioBars(
-    width: Dp, maxHeight: Dp,
-    amount: Int = 3, color: Color = Color.Green, spacing: Dp = 2.dp,
+    width: Dp,
+    maxHeight: Dp,
+    amount: Int = 3,
+    color: Color = Color.Green,
+    spacing: Dp = 2.dp
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(spacing),
@@ -44,7 +47,7 @@ fun JetAudioBars(
 
 @Composable
 private fun JetAudioBarAnimated(width: Dp, maxHeight: Dp, color: Color = Color.Green) {
-    val duration by remember { mutableStateOf(Random.nextInt(500, 700)) }
+    val duration by remember { mutableStateOf(Random.nextInt(500, 4000)) }
     val delay by remember { mutableStateOf(Random.nextInt(100, 300)) }
     val infiniteTransition = rememberInfiniteTransition()
     val animation by infiniteTransition.animateFloat(

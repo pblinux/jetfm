@@ -14,13 +14,11 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import tech.pixela.jetfm.ui.screens.Home
 import tech.pixela.jetfm.ui.theme.JetfmTheme
 
-@ExperimentalPagerApi
 @ExperimentalMaterial3Api
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
@@ -35,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
             SideEffect {
                 systemUiController.setStatusBarColor(
-                    color = if(isDarkTheme) Color.Green else Color.Yellow,
+                    color = if (isDarkTheme) Color.Green else Color.Yellow,
                     darkIcons = false
                 )
             }

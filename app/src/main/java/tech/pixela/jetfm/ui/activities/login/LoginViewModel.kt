@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val lastfmRepository: LastfmRepository,
-    private val dataStoreManager: DataStoreManager,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
     // Login state handler
     private val _loginState = MutableStateFlow<JetResult<LoginResult>>(JetResult.Fresh)

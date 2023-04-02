@@ -38,7 +38,7 @@ object Dependencies {
             const val hilt_navigation =
                 "androidx.hilt:hilt-navigation-compose:${Versions.Android.JetpackCompose.hilt_navigation}"
             const val material2 =
-                "androidx.compose.material:material:${Versions.Android.JetpackCompose.compose}"
+                "androidx.compose.material:material:${Versions.Android.JetpackCompose.material}"
             const val material3 =
                 "androidx.compose.material3:material3:${Versions.Android.JetpackCompose.material3}"
             const val navigation =
@@ -46,18 +46,18 @@ object Dependencies {
             const val paging =
                 "androidx.paging:paging-compose:${tech.pixela.jetfm.Versions.Android.JetpackCompose.paging}"
             const val tooling_preview =
-                "androidx.compose.ui:ui-tooling-preview:${Versions.Android.JetpackCompose.compose}"
-            const val ui = "androidx.compose.ui:ui:${Versions.Android.JetpackCompose.compose}"
+                "androidx.compose.ui:ui-tooling-preview:${Versions.Android.JetpackCompose.tooling}"
+            const val ui = "androidx.compose.ui:ui:${Versions.Android.JetpackCompose.ui}"
             const val view_model =
                 "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.Android.JetpackCompose.view_model}"
 
             object Testing {
                 const val ui_test_manifest =
-                    "androidx.compose.ui:ui-test-manifest:${Versions.Android.JetpackCompose.compose}"
+                    "androidx.compose.ui:ui-test-manifest:${Versions.Android.JetpackCompose.tooling}"
                 const val ui_testing =
-                    "androidx.compose.ui:ui-test-junit4:${Versions.Android.JetpackCompose.compose}"
+                    "androidx.compose.ui:ui-test-junit4:${Versions.Android.JetpackCompose.tooling}"
                 const val ui_tooling =
-                    "androidx.compose.ui:ui-tooling:${Versions.Android.JetpackCompose.compose}"
+                    "androidx.compose.ui:ui-tooling:${Versions.Android.JetpackCompose.tooling}"
             }
         }
 
@@ -96,9 +96,9 @@ object Dependencies {
 
         object MaterialMotion {
             const val core =
-                "com.github.fornewid.material-motion-compose:core:${Versions.ThirdParty.material_motion}"
+                "io.github.fornewid:material-motion-compose-core:${Versions.ThirdParty.material_motion}"
             const val navigation =
-                "com.github.fornewid.material-motion-compose:navigation:${Versions.ThirdParty.material_motion}"
+                "io.github.fornewid:material-motion-compose-navigation:${Versions.ThirdParty.material_motion}"
         }
 
         object SquareUp {

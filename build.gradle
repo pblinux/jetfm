@@ -1,20 +1,21 @@
-import tech.pixela.jetfm.Dependencies
+import tech.pixela.jetfm.NewDependencies
 
 buildscript {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath Dependencies.Android.Jetpack.hilt_plugin
+        classpath NewDependencies.Android.Jetpack.hilt_plugin
     }
 }
 plugins {
-    id 'com.android.application' version '7.2.1' apply false
-    id 'com.android.library' version '7.2.1' apply false
-    id 'org.jetbrains.kotlin.android' version '1.7.10' apply false
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.7.10'
-    id 'com.github.ben-manes.versions' version "0.42.0"
+    id 'com.android.application' version '7.4.2' apply false
+    id 'com.android.library' version '7.4.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.10'
+    id 'org.jlleitschuh.gradle.ktlint' version '11.3.1'
 }
 
 task clean(type: Delete) {

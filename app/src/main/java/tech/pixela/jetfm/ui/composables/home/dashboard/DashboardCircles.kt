@@ -22,10 +22,12 @@ fun DashboardCircles(
         modifier = modifier
             .offset(100.dp, (-25).dp),
         enter = materialFadeIn(),
-        exit = materialFadeOut(),
+        exit = materialFadeOut()
     ) {
         JetCircles(
-            size = 250, stroke = 2f, modifier = Modifier
+            size = 250,
+            stroke = 2f,
+            modifier = Modifier
                 .alpha(0.25f)
         )
     }

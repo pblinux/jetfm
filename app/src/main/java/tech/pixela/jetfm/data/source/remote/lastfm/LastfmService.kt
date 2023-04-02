@@ -4,9 +4,15 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-import tech.pixela.jetfm.data.model.lastfm.base.User
 import tech.pixela.jetfm.data.model.lastfm.common.Period
-import tech.pixela.jetfm.data.model.lastfm.result.*
+import tech.pixela.jetfm.data.model.lastfm.result.FriendsResult
+import tech.pixela.jetfm.data.model.lastfm.result.LoginResult
+import tech.pixela.jetfm.data.model.lastfm.result.LovedTracksResult
+import tech.pixela.jetfm.data.model.lastfm.result.RecentTracksResult
+import tech.pixela.jetfm.data.model.lastfm.result.TopAlbumsResult
+import tech.pixela.jetfm.data.model.lastfm.result.TopArtistsResult
+import tech.pixela.jetfm.data.model.lastfm.result.TopTracksResult
+import tech.pixela.jetfm.data.model.lastfm.result.UserResult
 
 interface LastfmService {
     /*
@@ -18,7 +24,7 @@ interface LastfmService {
         @Query("username") username: String,
         @Query("password") password: String,
         @Query("api_key") key: String,
-        @Query("api_sig") signature: String,
+        @Query("api_sig") signature: String
     ): Response<LoginResult>
 
     /*
@@ -39,7 +45,7 @@ interface LastfmService {
     suspend fun getFriends(
         @Query("user") user: String,
         @Query("api_key") key: String,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<FriendsResult>
 
     /*
@@ -51,7 +57,7 @@ interface LastfmService {
         @Query("user") user: String,
         @Query("api_key") key: String,
         @Query("limit") limit: Int = 20,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<RecentTracksResult>
 
     /*
@@ -64,7 +70,7 @@ interface LastfmService {
         @Query("api_key") key: String,
         @Query("period") period: String = Period.Weekly.value,
         @Query("limit") limit: Int = 10,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<TopArtistsResult>
 
     /*
@@ -77,7 +83,7 @@ interface LastfmService {
         @Query("api_key") key: String,
         @Query("period") period: String = Period.Weekly.value,
         @Query("limit") limit: Int = 10,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<TopAlbumsResult>
 
     /*
@@ -90,7 +96,7 @@ interface LastfmService {
         @Query("api_key") key: String,
         @Query("period") period: String = Period.Weekly.value,
         @Query("limit") limit: Int = 10,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<TopTracksResult>
 
     /*
@@ -102,6 +108,6 @@ interface LastfmService {
         @Query("user") user: String,
         @Query("api_key") key: String,
         @Query("limit") limit: Int = 10,
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int = 1
     ): Response<LovedTracksResult>
 }

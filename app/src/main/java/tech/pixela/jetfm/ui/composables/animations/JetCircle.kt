@@ -4,7 +4,6 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,17 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview()
+@Preview
 @Composable
 fun PreviewJetCircles() {
     JetCircles(modifier = Modifier.alpha(0.5f), size = 200)
 }
-
 
 @Composable
 fun JetCircles(size: Int, modifier: Modifier, stroke: Float = 1f) {
@@ -87,13 +84,12 @@ fun JetCircles(size: Int, modifier: Modifier, stroke: Float = 1f) {
     }
 }
 
-
 @Composable
 fun JetCircle(modifier: Modifier = Modifier, stroke: Float = 1f) {
     val colors = listOf(
         MaterialTheme.colorScheme.tertiary,
         MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.secondary,
+        MaterialTheme.colorScheme.secondary
     )
 
     Canvas(
@@ -103,8 +99,8 @@ fun JetCircle(modifier: Modifier = Modifier, stroke: Float = 1f) {
                 brush = Brush.linearGradient(colors),
                 style = Stroke(
                     width = stroke
-                ),
+                )
             )
-        },
+        }
     )
 }

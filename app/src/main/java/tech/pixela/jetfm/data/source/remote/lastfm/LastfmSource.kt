@@ -2,7 +2,6 @@ package tech.pixela.jetfm.data.source.remote.lastfm
 
 import android.util.Log
 import retrofit2.Response
-import tech.pixela.jetfm.data.model.lastfm.base.User
 import tech.pixela.jetfm.data.model.lastfm.common.Period
 import tech.pixela.jetfm.data.model.lastfm.result.*
 import tech.pixela.jetfm.utils.general.LastfmSignature
@@ -11,7 +10,7 @@ import javax.inject.Inject
 class LastfmSource @Inject constructor(
     private val service: LastfmService,
     private val key: String,
-    private val secret: String,
+    private val secret: String
 ) {
     /*
     * Login
@@ -38,7 +37,7 @@ class LastfmSource @Inject constructor(
     * Retrieves user information
     * */
     suspend fun getUserInfo(
-        user: String,
+        user: String
     ): Result<UserResult> {
         return response { service.getUserInfo(user = user, key = key) }
     }
@@ -49,7 +48,7 @@ class LastfmSource @Inject constructor(
     * */
     suspend fun getFriends(
         user: String,
-        page: Int = 1,
+        page: Int = 1
     ): Result<FriendsResult> {
         return response { service.getFriends(user = user, key = key, page = page) }
     }
@@ -61,7 +60,7 @@ class LastfmSource @Inject constructor(
     suspend fun getRecentTracks(
         user: String,
         limit: Int = 20,
-        page: Int = 1,
+        page: Int = 1
     ): Result<RecentTracksResult> {
         return response { service.getRecentTracks(user, key, limit, page) }
     }
@@ -74,7 +73,7 @@ class LastfmSource @Inject constructor(
         user: String,
         period: String = Period.Weekly.value,
         limit: Int = 10,
-        page: Int = 1,
+        page: Int = 1
     ): Result<TopArtistsResult> {
         return response { service.getTopPeriodArtists(user, key, period, limit, page) }
     }
@@ -87,7 +86,7 @@ class LastfmSource @Inject constructor(
         user: String,
         period: String = Period.Weekly.value,
         limit: Int = 10,
-        page: Int = 1,
+        page: Int = 1
     ): Result<TopAlbumsResult> {
         return response { service.getTopPeriodAlbums(user, key, period, limit, page) }
     }
@@ -100,7 +99,7 @@ class LastfmSource @Inject constructor(
         user: String,
         period: String = Period.Weekly.value,
         limit: Int = 10,
-        page: Int = 1,
+        page: Int = 1
     ): Result<TopTracksResult> {
         return response { service.getTopPeriodTracks(user, key, period, limit, page) }
     }
@@ -112,11 +111,10 @@ class LastfmSource @Inject constructor(
     suspend fun getLovedTracks(
         user: String,
         limit: Int = 10,
-        page: Int = 1,
+        page: Int = 1
     ): Result<LovedTracksResult> {
         return response { service.getLovedTracks(user, key, limit, page) }
     }
-
 
     /*
     * General response

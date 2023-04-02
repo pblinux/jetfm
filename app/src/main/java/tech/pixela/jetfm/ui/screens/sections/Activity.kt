@@ -2,16 +2,17 @@ package tech.pixela.jetfm.ui.screens.sections
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.pixela.jetfm.data.model.utils.ActivityRoute
@@ -25,7 +26,6 @@ import tech.pixela.jetfm.ui.screens.sections.activities.Tracks
 
 @ExperimentalMaterial3Api
 @ExperimentalAnimationApi
-@ExperimentalPagerApi
 @ExperimentalFoundationApi
 @Composable
 fun Activity(
@@ -60,7 +60,7 @@ fun Activity(
                     albumsLazyListState = albumsListState,
                     artistsLazyListState = artistsListState,
                     tracksLazyListState = tracksListState,
-                    lovedTracksLazyListState = lovedTracksListState,
+                    lovedTracksLazyListState = lovedTracksListState
                 )
             ) {
                 scrollUp(
@@ -69,12 +69,16 @@ fun Activity(
                     albumsLazyListState = albumsListState,
                     artistsLazyListState = artistsListState,
                     tracksLazyListState = tracksListState,
-                    lovedTracksLazyListState = lovedTracksListState,
+                    lovedTracksLazyListState = lovedTracksListState
                 )
             }
         }
     ) {
-        HorizontalPager(count = items.count(), state = pagerState) { page ->
+        HorizontalPager(
+            pageCount = items.count(),
+            state = pagerState,
+            modifier = Modifier.padding(it)
+        ) { page ->
             when (items[page]) {
                 ActivityRoute.Tracks -> {
                     Tracks(
@@ -110,7 +114,7 @@ fun showScrollButton(
     albumsLazyListState: LazyListState,
     artistsLazyListState: LazyListState,
     lovedTracksLazyListState: LazyListState,
-    tracksLazyListState: LazyListState,
+    tracksLazyListState: LazyListState
 ): Boolean {
     return when (route) {
         ActivityRoute.Tracks -> {
@@ -134,7 +138,7 @@ fun scrollUp(
     albumsLazyListState: LazyListState,
     artistsLazyListState: LazyListState,
     lovedTracksLazyListState: LazyListState,
-    tracksLazyListState: LazyListState,
+    tracksLazyListState: LazyListState
 ) {
     when (route) {
         ActivityRoute.Tracks -> {

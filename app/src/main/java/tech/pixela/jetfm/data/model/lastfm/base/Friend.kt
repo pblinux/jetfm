@@ -16,5 +16,5 @@ data class Friend(
     val playlists: Int,
     val registered: RegisteredVariant,
     val subscriber: Int,
-    val url: String,
+    val url: String
 )

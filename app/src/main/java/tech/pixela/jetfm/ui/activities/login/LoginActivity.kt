@@ -12,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import tech.pixela.jetfm.data.model.utils.JetResult
 import tech.pixela.jetfm.ui.activities.main.MainActivity
@@ -23,7 +22,6 @@ import tech.pixela.jetfm.ui.theme.JetfmTheme
 @ExperimentalMaterial3Api
 @ExperimentalCoilApi
 @ExperimentalFoundationApi
-@ExperimentalPagerApi
 @AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel by viewModels()

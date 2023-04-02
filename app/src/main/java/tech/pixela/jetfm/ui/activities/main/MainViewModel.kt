@@ -10,9 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import tech.pixela.jetfm.data.model.lastfm.base.*
+import tech.pixela.jetfm.data.model.lastfm.base.Album
+import tech.pixela.jetfm.data.model.lastfm.base.Artist
+import tech.pixela.jetfm.data.model.lastfm.base.Friend
+import tech.pixela.jetfm.data.model.lastfm.base.Track
 import tech.pixela.jetfm.data.model.lastfm.common.Period
 import tech.pixela.jetfm.data.model.lastfm.holders.HomeHolder
 import tech.pixela.jetfm.data.model.lastfm.result.UserResult
@@ -25,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val lastfmRepository: LastfmRepository,
-    private val dataStoreManager: DataStoreManager,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
     init {
         viewModelScope.launch {
@@ -119,7 +121,9 @@ class MainViewModel @Inject constructor(
         artists =
             Pager(PagingConfig(pageSize = 10)) {
                 PagingArtistsSource(
-                    lastfmRepository.lastfmSource, _user.value, _currentPeriod.value
+                    lastfmRepository.lastfmSource,
+                    _user.value,
+                    _currentPeriod.value
                 )
             }.flow.cachedIn(viewModelScope)
 

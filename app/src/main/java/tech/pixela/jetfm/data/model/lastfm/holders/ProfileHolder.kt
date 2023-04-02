@@ -5,5 +5,5 @@ import tech.pixela.jetfm.data.model.lastfm.base.User
 
 @Serializable
 data class ProfileHolder(
-  val user: User
+    val user: User
 )

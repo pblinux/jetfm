@@ -18,5 +18,5 @@ data class Track(
     val duration: Int? = null,
     val image: List<Image> = listOf(),
     val name: String,
-    val url: String,
+    val url: String
 )

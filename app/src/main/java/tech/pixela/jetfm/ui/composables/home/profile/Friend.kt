@@ -7,10 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import tech.pixela.jetfm.data.model.lastfm.base.Friend
-import tech.pixela.jetfm.data.model.lastfm.base.User
 import tech.pixela.jetfm.ui.composables.common.JetImage
 import tech.pixela.jetfm.ui.composables.common.MediumJetSpace
 
@@ -22,7 +20,7 @@ fun Friend(friend: Friend, modifier: Modifier = Modifier) {
     ) {
         Row(
             modifier = Modifier.padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             JetImage(
                 url = friend.image.single { it.size == "extralarge" }.url,

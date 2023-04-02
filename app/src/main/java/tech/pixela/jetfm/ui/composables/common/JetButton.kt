@@ -1,7 +1,10 @@
 package tech.pixela.jetfm.ui.composables.common
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,18 +22,19 @@ import java.util.*
 private fun PreviewJetButton() {
     var isLoading by remember { mutableStateOf(false) }
     JetButton(
-        title = "Testing", onClick = { isLoading = !isLoading }, isLoading = isLoading,
+        title = "Testing",
+        onClick = { isLoading = !isLoading },
+        isLoading = isLoading,
         modifier = Modifier.fillMaxWidth()
     )
 }
-
 
 @Composable
 fun JetButton(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isLoading: Boolean = false,
+    isLoading: Boolean = false
 ) {
     Button(
         modifier = modifier
@@ -39,21 +43,22 @@ fun JetButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
+        )
     ) {
-        if (isLoading)
+        if (isLoading) {
             CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .size(24.dp)
             )
-        else
+        } else {
             Text(
                 text = title.uppercase(Locale.getDefault()),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.padding(8.dp)
             )
+        }
     }
 }

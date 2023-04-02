@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import tech.pixela.jetfm.ui.composables.animations.JetAudioBars
 import tech.pixela.jetfm.ui.composables.common.JetImage
-import tech.pixela.jetfm.ui.composables.common.MediumJetSpace
 import tech.pixela.jetfm.ui.composables.common.JetOverlay
+import tech.pixela.jetfm.ui.composables.common.MediumJetSpace
 
 @Preview
 @Composable
@@ -49,20 +49,23 @@ fun JetRowCard(
     album: String,
     imageUrl: String,
     modifier: Modifier = Modifier,
-    isPlaying: Boolean = false,
+    isPlaying: Boolean = false
 ) {
     Card(
         modifier = modifier.sizeIn(
             maxHeight = 200.dp,
             maxWidth = 325.dp,
             minHeight = 175.dp,
-            minWidth = 175.dp,
+            minWidth = 175.dp
         )
     ) {
         JetImage(url = imageUrl, modifier = Modifier.fillMaxSize())
         JetOverlay(
-            color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.outline
+            color = if (isSystemInDarkTheme()) {
+                MaterialTheme.colorScheme.surface
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
         )
         Box(
             modifier = Modifier
@@ -91,9 +94,12 @@ fun JetRowCard(
                             append(" by $artist")
                         }
                     },
-                    color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onSurface
-                    else MaterialTheme.colorScheme.inverseOnSurface,
-                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (isSystemInDarkTheme()) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.inverseOnSurface
+                    },
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
             if (album.isNotBlank()) {
@@ -103,16 +109,22 @@ fun JetRowCard(
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Bold,
-                                color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.inverseOnSurface,
+                                color = if (isSystemInDarkTheme()) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.inverseOnSurface
+                                }
                             )
                         ) {
                             append(album)
                         }
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onSurface
-                    else MaterialTheme.colorScheme.inverseOnSurface,
+                    color = if (isSystemInDarkTheme()) {
+                        MaterialTheme.colorScheme.onSurface
+                    } else {
+                        MaterialTheme.colorScheme.inverseOnSurface
+                    },
                     modifier = Modifier.align(Alignment.TopEnd)
                 )
             }
@@ -126,7 +138,7 @@ fun JetRowVariantCard(
     headline: String,
     imageUrl: String,
     width: Dp,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
@@ -134,13 +146,16 @@ fun JetRowVariantCard(
                 maxWidth = width,
                 minWidth = width,
                 maxHeight = 200.dp,
-                minHeight = 175.dp,
+                minHeight = 175.dp
             )
     ) {
         JetImage(url = imageUrl, modifier = Modifier.fillMaxSize())
         JetOverlay(
-            color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.outline
+            color = if (isSystemInDarkTheme()) {
+                MaterialTheme.colorScheme.surface
+            } else {
+                MaterialTheme.colorScheme.outline
+            }
         )
         Box(
             modifier = Modifier
@@ -150,8 +165,11 @@ fun JetRowVariantCard(
         ) {
             Text(
                 text = text,
-                color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.inverseOnSurface,
+                color = if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.inverseOnSurface
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.align(Alignment.BottomStart)
             )
@@ -159,8 +177,11 @@ fun JetRowVariantCard(
                 text = headline,
                 style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.Medium,
-                color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.inverseOnSurface,
+                color = if (isSystemInDarkTheme()) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.inverseOnSurface
+                },
                 modifier = Modifier.align(Alignment.TopEnd)
             )
         }
@@ -172,7 +193,7 @@ fun JetRowFullCard(
     text: String,
     imageUrl: String,
     modifier: Modifier = Modifier,
-    headline: String? = null,
+    headline: String? = null
 ) {
     Card(
         modifier = modifier
@@ -181,8 +202,11 @@ fun JetRowFullCard(
     ) {
         JetImage(url = imageUrl, modifier = Modifier.fillMaxSize())
         JetOverlay(
-            color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.primaryContainer
+            color = if (isSystemInDarkTheme()) {
+                MaterialTheme.colorScheme.surface
+            } else {
+                MaterialTheme.colorScheme.primaryContainer
+            }
         )
         Box(
             modifier = Modifier

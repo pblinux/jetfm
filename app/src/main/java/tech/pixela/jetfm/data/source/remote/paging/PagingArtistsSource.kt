@@ -9,7 +9,7 @@ import tech.pixela.jetfm.data.source.remote.lastfm.LastfmSource
 class PagingArtistsSource(
     private val lastfmSource: LastfmSource,
     private val user: String,
-    private val period: Period,
+    private val period: Period
 ) : PagingSource<Int, Artist>() {
     override fun getRefreshKey(state: PagingState<Int, Artist>): Int? {
         return state.anchorPosition
@@ -25,8 +25,12 @@ class PagingArtistsSource(
                         data = result.getOrThrow().topArtists.artists,
                         prevKey = null,
                         nextKey = if (
-                            next <= result.getOrThrow().topArtists.meta.totalPages) next.plus(1)
-                        else null
+                            next <= result.getOrThrow().topArtists.meta.totalPages
+                        ) {
+                            next.plus(1)
+                        } else {
+                            null
+                        }
                     )
                 }
                 false -> {

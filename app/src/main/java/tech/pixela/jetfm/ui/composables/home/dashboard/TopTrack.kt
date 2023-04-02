@@ -11,6 +11,6 @@ fun TopTrack(track: Track) {
         artist = track.artist.name,
         imageUrl = track.image.single { it.size == "extralarge" }.url,
         isPlaying = false,
-        song = track.name,
+        song = track.name
     )
 }

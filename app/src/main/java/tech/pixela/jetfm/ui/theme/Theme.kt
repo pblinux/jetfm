@@ -9,7 +9,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 
 val JetLightScheme =
     lightColorScheme(
@@ -37,7 +37,7 @@ val JetLightScheme =
         onSurfaceVariant = LightOnSurfaceVariant,
         outline = LightOutline,
         inverseOnSurface = LightInverseOnSurface,
-        inverseSurface = LightInverseSurface,
+        inverseSurface = LightInverseSurface
     )
 
 val JetDarkScheme =
@@ -66,7 +66,7 @@ val JetDarkScheme =
         onSurfaceVariant = DarkOnSurfaceVariant,
         outline = DarkOutline,
         inverseOnSurface = DarkInverseOnSurface,
-        inverseSurface = DarkInverseSurface,
+        inverseSurface = DarkInverseSurface
     )
 
 @Composable
@@ -85,9 +85,13 @@ fun JetfmTheme(
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
+        val currentWindow = (view.context as? Activity)?.window
+            ?: throw Exception("Not in an activity - unable to get Window reference")
+
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            currentWindow.statusBarColor = colorScheme.primary.toArgb()
+            WindowCompat.getInsetsController(currentWindow, view).isAppearanceLightStatusBars =
+                darkTheme
         }
     }
 

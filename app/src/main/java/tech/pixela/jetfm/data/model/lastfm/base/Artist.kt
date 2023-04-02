@@ -8,11 +8,11 @@ import tech.pixela.jetfm.data.model.lastfm.common.Image
 @Suppress("SpellCheckingInspection")
 @Serializable
 data class Artist(
-  @SerialName("@attr") val attributes: Attributes? = null,
-  @SerialName("playcount") val playCount: Int,
-  val image: List<Image> = listOf(),
-  val mbid: String,
-  val name: String,
-  val streamable: Int,
-  val url: String,
+    @SerialName("@attr") val attributes: Attributes? = null,
+    @SerialName("playcount") val playCount: Int,
+    val image: List<Image> = listOf(),
+    val mbid: String,
+    val name: String,
+    val streamable: Int,
+    val url: String
 )

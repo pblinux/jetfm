@@ -12,7 +12,7 @@ import tech.pixela.jetfm.data.model.utils.JetResult
 
 fun <T> LazyListScope.withState(
     state: JetResult<T>,
-    content: LazyListScope.(T) -> Unit,
+    content: LazyListScope.(T) -> Unit
 ) {
     when (state) {
         JetResult.Loading -> {

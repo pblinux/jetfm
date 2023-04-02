@@ -9,14 +9,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import coil.annotation.ExperimentalCoilApi
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import tech.pixela.jetfm.data.source.local.datastore.DataStoreManager
-import tech.pixela.jetfm.ui.activities.main.MainActivity
 import tech.pixela.jetfm.ui.activities.login.LoginActivity
+import tech.pixela.jetfm.ui.activities.main.MainActivity
 import tech.pixela.jetfm.ui.screens.Splash
 import tech.pixela.jetfm.ui.theme.JetfmTheme
 import javax.inject.Inject
@@ -25,7 +23,6 @@ import javax.inject.Inject
 @ExperimentalAnimationApi
 @ExperimentalCoilApi
 @ExperimentalMaterial3Api
-@ExperimentalPagerApi
 @SuppressLint("CustomSplashScreen")
 @ExperimentalFoundationApi
 @AndroidEntryPoint

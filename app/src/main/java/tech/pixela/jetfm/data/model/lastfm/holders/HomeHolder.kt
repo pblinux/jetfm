@@ -8,8 +8,8 @@ import tech.pixela.jetfm.data.model.lastfm.groups.TopTracks
 
 @Serializable
 data class HomeHolder(
-  val recentTracks: RecentTracks,
-  val topAlbums: TopAlbums,
-  val topArtists: TopArtists,
-  val topTracks: TopTracks,
+    val recentTracks: RecentTracks,
+    val topAlbums: TopAlbums,
+    val topArtists: TopArtists,
+    val topTracks: TopTracks
 )
